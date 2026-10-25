@@ -1,0 +1,174 @@
+/* === LIGHT THEME: Executive Bureau Mode === */
+:root {
+  --bg-app: #F8FAFC;
+  --bg-card: rgba(255, 255, 255, 0.92);
+  --bg-card-subtle: #F1F5F9;
+  --bg-sidebar: #0E1A3A;
+  --bg-sidebar-active: #2563EB;
+  --bg-sidebar-hover: rgba(255, 255, 255, 0.08);
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-on-dark: #F1F5F9;
+
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-soft: rgba(37, 99, 235, 0.08);
+  --success: #16A34A;
+  --success-soft: rgba(22, 163, 74, 0.1);
+  --warning: #D97706;
+  --warning-soft: rgba(217, 119, 6, 0.1);
+  --danger: #DC2626;
+  --danger-soft: rgba(220, 38, 38, 0.08);
+  --orange: #EA580C;
+  --orange-soft: rgba(234, 88, 12, 0.08);
+  --neutral: #64748B;
+  --neutral-soft: rgba(100, 116, 139, 0.08);
+
+  --border: rgba(203, 213, 225, 0.85);
+  --border-bright: rgba(37, 99, 235, 0.35);
+  --radius-card: 14px;
+  --radius-chip: 6px;
+
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.03);
+  --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.14);
+  --shadow-danger-glow: 0 0 16px rgba(220, 38, 38, 0.15);
+  --shadow-success-glow: 0 0 16px rgba(22, 163, 74, 0.15);
+
+  --grid-line: rgba(37, 99, 235, 0.035);
+}
+
+/* === DARK THEME: Deep Intelligence Terminal (Default) === */
+.dark {
+  --bg-app: #080C14;
+  --bg-card: rgba(14, 22, 48, 0.72);
+  --bg-card-subtle: rgba(14, 22, 48, 0.45);
+  --bg-sidebar: #04070F;
+  --bg-sidebar-active: #1D3A7A;
+  --bg-sidebar-hover: rgba(59, 130, 246, 0.08);
+
+  --text-primary: #EEF2FF;
+  --text-secondary: #93A4C4;
+  --text-muted: #4E6087;
+  --text-on-dark: #C7D5F0;
+
+  --primary: #3B82F6;
+  --primary-hover: #2563EB;
+  --primary-soft: rgba(59, 130, 246, 0.12);
+  --success: #22C55E;
+  --success-soft: rgba(34, 197, 94, 0.12);
+  --warning: #F59E0B;
+  --warning-soft: rgba(245, 158, 11, 0.12);
+  --danger: #EF4444;
+  --danger-soft: rgba(239, 68, 68, 0.12);
+  --orange: #F97316;
+  --orange-soft: rgba(249, 115, 22, 0.12);
+  --neutral: #4E6087;
+  --neutral-soft: rgba(78, 96, 135, 0.12);
+
+  --border: rgba(99, 120, 190, 0.16);
+  --border-bright: rgba(99, 120, 190, 0.38);
+
+  --shadow-card: 0 0 0 1px rgba(59, 130, 246, 0.08), 0 4px 24px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 24px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.18);
+  --shadow-danger-glow: 0 0 20px rgba(239, 68, 68, 0.28), 0 0 0 1px rgba(239, 68, 68, 0.2);
+  --shadow-success-glow: 0 0 20px rgba(34, 197, 94, 0.25), 0 0 0 1px rgba(34, 197, 94, 0.18);
+
+  --grid-line: rgba(59, 130, 246, 0.04);
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === GLOBAL SURFACE WITH GRID PATTERN === */
+body {
+  margin: 0;
+  background-color: var(--bg-app);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 36px 36px;
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* === GLASS CARD SURFACES === */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.glass-card-glow {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-bright);
+  box-shadow: var(--shadow-glow);
+}
+
+/* === SCROLLBAR STYLING === */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(99, 120, 190, 0.35);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+/* === KEYFRAMES & ANIMATION CLASSES === */
+@keyframes pulse-danger {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(239, 68, 68, 0);
+  }
+}
+
+@keyframes pulse-warning {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(450%);
+  }
+}
+
+.animate-pulse-danger {
+  animation: pulse-danger 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-pulse-warning {
+  animation: pulse-warning 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.scan-anim {
+  animation: scan-line 4s linear infinite;
+}

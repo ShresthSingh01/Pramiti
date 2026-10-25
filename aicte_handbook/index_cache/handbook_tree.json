@@ -1,0 +1,2302 @@
+{
+  "source_pdf": "D:\\SIH26\\aicte_handbook\\aicte_handbook.pdf",
+  "doc_name": "aicte_handbook.pdf",
+  "page_count": 231,
+  "structure": [
+    {
+      "title": "Preface",
+      "start_index": 1,
+      "end_index": 3,
+      "node_id": "0000"
+    },
+    {
+      "title": "This Handbook is a Legal Document as per",
+      "node_id": "0001",
+      "start_index": 4,
+      "end_index": 4
+    },
+    {
+      "title": "FOREWORD",
+      "node_id": "0002",
+      "start_index": 5,
+      "end_index": 6
+    },
+    {
+      "title": "Message from Vice Chairman Desk",
+      "node_id": "0003",
+      "start_index": 7,
+      "end_index": 7
+    },
+    {
+      "title": "Message from Member Secretary Desk",
+      "node_id": "0004",
+      "start_index": 8,
+      "end_index": 10,
+      "nodes": [
+        {
+          "title": "Prof. Rajive Kumar",
+          "node_id": "0005",
+          "start_index": 8,
+          "end_index": 10
+        }
+      ]
+    },
+    {
+      "title": "ABBREVIATIONS",
+      "node_id": "0006",
+      "start_index": 10,
+      "end_index": 11
+    },
+    {
+      "title": "DEFINITIONS",
+      "node_id": "0007",
+      "start_index": 12,
+      "end_index": 15,
+      "nodes": [
+        {
+          "title": "Definitions",
+          "node_id": "0008",
+          "start_index": 12,
+          "end_index": 15
+        }
+      ]
+    },
+    {
+      "title": "PREAMBLE",
+      "node_id": "0009",
+      "start_index": 16,
+      "end_index": 16,
+      "nodes": [
+        {
+          "title": "Important Provisions of AICTE Act, 1987 in Approval Process",
+          "node_id": "0010",
+          "start_index": 16,
+          "end_index": 16
+        },
+        {
+          "title": "Future of Technical Education in India",
+          "node_id": "0011",
+          "start_index": 16,
+          "end_index": 16
+        }
+      ]
+    },
+    {
+      "title": "CHAPTER-I",
+      "node_id": "0012",
+      "start_index": 17,
+      "end_index": 26,
+      "nodes": [
+        {
+          "title": "Grant of Approval for New Institution",
+          "node_id": "0013",
+          "start_index": 17,
+          "end_index": 26,
+          "nodes": [
+            {
+              "title": "1.1 Introduction",
+              "node_id": "0014",
+              "start_index": 17,
+              "end_index": 17
+            },
+            {
+              "title": "1.2 Timeline",
+              "node_id": "0015",
+              "start_index": 17,
+              "end_index": 17
+            },
+            {
+              "title": "1.3 Application for Seeking Approval of the Council",
+              "node_id": "0016",
+              "start_index": 17,
+              "end_index": 18,
+              "nodes": [
+                {
+                  "title": "1.3.2 For Setting up a New Technical Institution proposed to offer a Programme in.",
+                  "node_id": "0017",
+                  "start_index": 17,
+                  "end_index": 18
+                },
+                {
+                  "title": "1.3.3 For the existing Institutions approved by other Regulatory Bodies, seeking approval for the first time from AICTE for conducting Technical Programme(s):",
+                  "node_id": "0018",
+                  "start_index": 18,
+                  "end_index": 18,
+                  "nodes": [
+                    {
+                      "title": "NOTE",
+                      "node_id": "0019",
+                      "start_index": 18,
+                      "end_index": 18
+                    }
+                  ]
+                },
+                {
+                  "title": "1.3.4 Eligibility of the Promoter",
+                  "node_id": "0020",
+                  "start_index": 18,
+                  "end_index": 18
+                }
+              ]
+            },
+            {
+              "title": "1.4 Submission of online Application by the Promoter",
+              "node_id": "0021",
+              "start_index": 18,
+              "end_index": 20,
+              "nodes": [
+                {
+                  "title": "1.4.1 Submission of online application through NSW portal & Allotment of USER ID for AICTE portal",
+                  "node_id": "0022",
+                  "start_index": 18,
+                  "end_index": 19
+                },
+                {
+                  "title": "1.4.2 Technical Education Regulatory (TER) Charges",
+                  "node_id": "0023",
+                  "start_index": 19,
+                  "end_index": 20,
+                  "nodes": [
+                    {
+                      "title": "1.4.2 Technical Education Regulatory (TER) Charges (intro)",
+                      "start_index": 19,
+                      "end_index": 20,
+                      "node_id": "0024"
+                    },
+                    {
+                      "title": "NOTE",
+                      "node_id": "0025",
+                      "start_index": 20,
+                      "end_index": 20
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "1.5. Establishment of a New Technical Institution",
+              "node_id": "0026",
+              "start_index": 20,
+              "end_index": 21,
+              "nodes": [
+                {
+                  "title": "1.5.1 Requirements and Eligibility",
+                  "node_id": "0027",
+                  "start_index": 20,
+                  "end_index": 21
+                },
+                {
+                  "title": "1.5.6 All Institutions shall use the same font and size for the full name of the Institutions, wherever it is displayed.",
+                  "node_id": "0028",
+                  "start_index": 21,
+                  "end_index": 21
+                }
+              ]
+            },
+            {
+              "title": "1.6 Appointment of Principal/Director and Faculty in Newly Approved Institution/ Programme",
+              "node_id": "0029",
+              "start_index": 21,
+              "end_index": 23
+            },
+            {
+              "title": "1.7 Intake allowed for New Technical Institution",
+              "node_id": "0030",
+              "start_index": 23,
+              "end_index": 23,
+              "nodes": [
+                {
+                  "title": "1.7.2 The Annexure-11 of the APH provides the details regarding the nomenclature of the courses for Diploma/Under Graduate / Post Graduate Level/Post Graduation Diploma or a combination thereof.",
+                  "node_id": "0031",
+                  "start_index": 23,
+                  "end_index": 23,
+                  "nodes": [
+                    {
+                      "title": "NOTE",
+                      "node_id": "0032",
+                      "start_index": 23,
+                      "end_index": 23
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "1.8 Process for Evaluation of the Application by the Scrutiny/ Re-Scrutiny Committee:",
+              "node_id": "0033",
+              "start_index": 23,
+              "end_index": 24,
+              "nodes": [
+                {
+                  "title": "1.8 Process for Evaluation of the Application by the Scrutiny/ Re-Scrutiny Committee: (intro)",
+                  "start_index": 23,
+                  "end_index": 24,
+                  "node_id": "0034"
+                },
+                {
+                  "title": "NOTE",
+                  "node_id": "0035",
+                  "start_index": 24,
+                  "end_index": 24
+                }
+              ]
+            },
+            {
+              "title": "1.9 Process for Evaluation of the Application by the Expert Visit Committee (EVC)",
+              "node_id": "0036",
+              "start_index": 24,
+              "end_index": 24,
+              "nodes": [
+                {
+                  "title": "NOTE",
+                  "node_id": "0037",
+                  "start_index": 24,
+                  "end_index": 24
+                }
+              ]
+            },
+            {
+              "title": "1.10. Grant of Approval",
+              "node_id": "0038",
+              "start_index": 24,
+              "end_index": 25
+            },
+            {
+              "title": "1.11 Appeal Procedure",
+              "node_id": "0039",
+              "start_index": 25,
+              "end_index": 26
+            },
+            {
+              "title": "1.12 Security Deposit",
+              "node_id": "0040",
+              "start_index": 26,
+              "end_index": 26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CHAPTER-II",
+      "node_id": "0041",
+      "start_index": 27,
+      "end_index": 48,
+      "nodes": [
+        {
+          "title": "2.1 Introduction",
+          "node_id": "0042",
+          "start_index": 27,
+          "end_index": 28
+        },
+        {
+          "title": "2.2. Time Schedule for Processing of Applications",
+          "node_id": "0043",
+          "start_index": 28,
+          "end_index": 28
+        },
+        {
+          "title": "2.3 Submission of Application for Extension of Approval",
+          "node_id": "0044",
+          "start_index": 28,
+          "end_index": 31,
+          "nodes": [
+            {
+              "title": "2.3.1 Submission of Application",
+              "node_id": "0045",
+              "start_index": 28,
+              "end_index": 28
+            },
+            {
+              "title": "2.3.2 Technical Education Regulatory (TER) Charges",
+              "node_id": "0046",
+              "start_index": 28,
+              "end_index": 30
+            },
+            {
+              "title": "2.3.3 Data entry, deficiency report and reopening of the submitted applications.",
+              "node_id": "0047",
+              "start_index": 30,
+              "end_index": 31
+            },
+            {
+              "title": "2.3.4 Documents and Affidavit to be uploaded on portal & Processing of application",
+              "node_id": "0048",
+              "start_index": 31,
+              "end_index": 31
+            },
+            {
+              "title": "2.3.5 Expert Visit Committee (Inspection)",
+              "node_id": "0049",
+              "start_index": 31,
+              "end_index": 31
+            }
+          ]
+        },
+        {
+          "title": "2.5 Extension of Approval based on Self-Disclosure",
+          "node_id": "0050",
+          "start_index": 31,
+          "end_index": 32
+        },
+        {
+          "title": "2.6 Increase in Intake / Additional Course(s)",
+          "node_id": "0051",
+          "start_index": 32,
+          "end_index": 33,
+          "nodes": [
+            {
+              "title": "2.6 Increase in Intake / Additional Course(s) (intro)",
+              "start_index": 32,
+              "end_index": 33,
+              "node_id": "0052"
+            },
+            {
+              "title": "NOTE",
+              "node_id": "0053",
+              "start_index": 33,
+              "end_index": 33
+            }
+          ]
+        },
+        {
+          "title": "2.7 To Start New Programme(s) / Level in the Existing Institutions",
+          "node_id": "0054",
+          "start_index": 33,
+          "end_index": 34
+        },
+        {
+          "title": "2.8 Approval for Introduction/ Continuation of Seats for Non-Resident Indian(s)",
+          "node_id": "0055",
+          "start_index": 34,
+          "end_index": 34
+        },
+        {
+          "title": "2.9 Introduction/Continuation of Supernumerary Seats for Foreign Nationals/Overseas Citizen of India (OCI)/Children of Indian Workers in Gulf Countries.",
+          "node_id": "0056",
+          "start_index": 34,
+          "end_index": 35
+        },
+        {
+          "title": "2.10 Introduction of Integrated / Dual Degree Course",
+          "node_id": "0057",
+          "start_index": 35,
+          "end_index": 36,
+          "nodes": [
+            {
+              "title": "2.10 Introduction of Integrated / Dual Degree Course (intro)",
+              "start_index": 35,
+              "end_index": 36,
+              "node_id": "0058"
+            },
+            {
+              "title": "NOTE",
+              "node_id": "0059",
+              "start_index": 36,
+              "end_index": 36
+            }
+          ]
+        },
+        {
+          "title": "2.11 Introduction of Off-Campus",
+          "node_id": "0060",
+          "start_index": 36,
+          "end_index": 36,
+          "nodes": [
+            {
+              "title": "NOTE 1",
+              "node_id": "0061",
+              "start_index": 36,
+              "end_index": 36
+            }
+          ]
+        },
+        {
+          "title": "2. Affiliating University Jurisdiction is NOT applicable for PGDM/PGCM Institutions.",
+          "node_id": "0062",
+          "start_index": 36,
+          "end_index": 48,
+          "nodes": [
+            {
+              "title": "2. Affiliating University Jurisdiction is NOT applicable for PGDM/PGCM Institutions. (intro)",
+              "start_index": 36,
+              "end_index": 37,
+              "node_id": "0063"
+            },
+            {
+              "title": "2.12 Introduction/Continuation of Fellow Programme in Management (FPM)",
+              "node_id": "0064",
+              "start_index": 37,
+              "end_index": 37
+            },
+            {
+              "title": "2.13 Merger of Institutions under the same / different Trust/ Society/ Company operating in the same Campus or City",
+              "node_id": "0065",
+              "start_index": 37,
+              "end_index": 39,
+              "nodes": [
+                {
+                  "title": "2.13.1 Merger of Institutions under the same Trust/ Society/ Company",
+                  "node_id": "0066",
+                  "start_index": 37,
+                  "end_index": 39,
+                  "nodes": [
+                    {
+                      "title": "2.13.1 Merger of Institutions under the same Trust/ Society/ Company (intro)",
+                      "start_index": 37,
+                      "end_index": 38,
+                      "node_id": "0067"
+                    },
+                    {
+                      "title": "NOTE",
+                      "node_id": "0068",
+                      "start_index": 38,
+                      "end_index": 38
+                    },
+                    {
+                      "title": "NOTE",
+                      "node_id": "0069",
+                      "start_index": 39,
+                      "end_index": 39
+                    }
+                  ]
+                },
+                {
+                  "title": "2.13.2 Merger of Institutions under the different Trust/ Society/ Company",
+                  "node_id": "0070",
+                  "start_index": 39,
+                  "end_index": 39
+                }
+              ]
+            },
+            {
+              "title": "2.14 Conversion of Diploma Level into Degree Level and Vice-Versa",
+              "node_id": "0071",
+              "start_index": 39,
+              "end_index": 39,
+              "nodes": [
+                {
+                  "title": "NOTE",
+                  "node_id": "0072",
+                  "start_index": 39,
+                  "end_index": 39
+                }
+              ]
+            },
+            {
+              "title": "2.15 Conversion of Women\u2019s Institution into Co-ed Institution and Vice-Versa",
+              "node_id": "0073",
+              "start_index": 40,
+              "end_index": 40
+            },
+            {
+              "title": "2.16 Extension of Approval of the Existing Institutions after a Break in the Preceding Academic Year(s) or Approval after Hybernation/ Restoration of Intake",
+              "node_id": "0074",
+              "start_index": 40,
+              "end_index": 41,
+              "nodes": [
+                {
+                  "title": "2.16.1 Restoration of Intake under Break in EoA",
+                  "node_id": "0075",
+                  "start_index": 40,
+                  "end_index": 40
+                },
+                {
+                  "title": "2.16.2 Restoration of Intake after Punitive Action",
+                  "node_id": "0076",
+                  "start_index": 40,
+                  "end_index": 41
+                }
+              ]
+            },
+            {
+              "title": "2.17 Change of Site/Location",
+              "node_id": "0077",
+              "start_index": 41,
+              "end_index": 41
+            },
+            {
+              "title": "2.18 Change in the Name of the Course(s)/Merger of the Course(s)/Reduction in Intake/ Closure of Programme(s)/Course(s)",
+              "node_id": "0078",
+              "start_index": 41,
+              "end_index": 42
+            },
+            {
+              "title": "2.19 Change in the Name of the Institution/Affiliating University/Board or Type of Institution(s) converted into a University.",
+              "node_id": "0079",
+              "start_index": 42,
+              "end_index": 48
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CHAPTER-III",
+      "node_id": "0080",
+      "start_index": 49,
+      "end_index": 52,
+      "nodes": [
+        {
+          "title": "CHAPTER-III (intro)",
+          "start_index": 49,
+          "end_index": 50,
+          "node_id": "0081"
+        },
+        {
+          "title": "3.1 Objectives",
+          "node_id": "0082",
+          "start_index": 50,
+          "end_index": 50
+        },
+        {
+          "title": "3.2 Requirements and Eligibility",
+          "node_id": "0083",
+          "start_index": 50,
+          "end_index": 51
+        },
+        {
+          "title": "3.3 Technical Education Regulatory (TER) Charges",
+          "node_id": "0084",
+          "start_index": 51,
+          "end_index": 51
+        },
+        {
+          "title": "3.4 Procedure",
+          "node_id": "0085",
+          "start_index": 51,
+          "end_index": 51
+        },
+        {
+          "title": "3.5 Other Conditions:",
+          "node_id": "0086",
+          "start_index": 52,
+          "end_index": 52
+        },
+        {
+          "title": "3.6 Admission and Fee",
+          "node_id": "0087",
+          "start_index": 52,
+          "end_index": 52
+        }
+      ]
+    },
+    {
+      "title": "CHAPTER-IV",
+      "node_id": "0088",
+      "start_index": 53,
+      "end_index": 60,
+      "nodes": [
+        {
+          "title": "4.1 Introduction",
+          "node_id": "0089",
+          "start_index": 53,
+          "end_index": 54,
+          "nodes": [
+            {
+              "title": "4.1 Introduction (intro)",
+              "start_index": 53,
+              "end_index": 54,
+              "node_id": "0090"
+            },
+            {
+              "title": "NOTE",
+              "node_id": "0091",
+              "start_index": 54,
+              "end_index": 54
+            }
+          ]
+        },
+        {
+          "title": "4.3 Time Schedule for Processing of Applications",
+          "node_id": "0092",
+          "start_index": 54,
+          "end_index": 54
+        },
+        {
+          "title": "4.4 Seeking Approval of the Council",
+          "node_id": "0093",
+          "start_index": 54,
+          "end_index": 55,
+          "nodes": [
+            {
+              "title": "4.4.2 Requirements and Eligibility",
+              "node_id": "0094",
+              "start_index": 54,
+              "end_index": 55
+            }
+          ]
+        },
+        {
+          "title": "4.5 Application Submission and Processing",
+          "node_id": "0095",
+          "start_index": 55,
+          "end_index": 56,
+          "nodes": [
+            {
+              "title": "4.5.1 USER ID and Password",
+              "node_id": "0096",
+              "start_index": 55,
+              "end_index": 55
+            },
+            {
+              "title": "4.5.2 Technical Education Regulatory (TER) Charges",
+              "node_id": "0097",
+              "start_index": 55,
+              "end_index": 55
+            },
+            {
+              "title": "4.5.3 a. Applicants shall submit the application on AICTE Web-Portal @ www.aicte-india.org. on or before the last date as mentioned in the Public Notice/ AICTE Website and it is MANDATORY.",
+              "node_id": "0098",
+              "start_index": 56,
+              "end_index": 56
+            },
+            {
+              "title": "4.5.6 For applications submitted for the categories mentioned under Chapter II and III, the documents should be submitted/uploaded as applicable in Annexure-2 of the Approval Process Handbook.",
+              "node_id": "0099",
+              "start_index": 56,
+              "end_index": 56
+            }
+          ]
+        },
+        {
+          "title": "4.6 Grant of Approval",
+          "node_id": "0100",
+          "start_index": 56,
+          "end_index": 57,
+          "nodes": [
+            {
+              "title": "4.6.1 Requirements and Eligibility",
+              "node_id": "0101",
+              "start_index": 56,
+              "end_index": 56
+            },
+            {
+              "title": "4.6.3 The Applicant shall apply on AICTE Web-Portal for all the Technical Programme(s) as approved by UGC for Approval.",
+              "node_id": "0102",
+              "start_index": 57,
+              "end_index": 57
+            },
+            {
+              "title": "4.6.4 The application shall be processed as per Clause 4.6 and 4.7 of the Approval Process Handbook (Through Scrutiny/ Re-Scrutiny Committee).",
+              "node_id": "0103",
+              "start_index": 57,
+              "end_index": 57
+            }
+          ]
+        },
+        {
+          "title": "4.7 Evaluation of the Applications",
+          "node_id": "0104",
+          "start_index": 57,
+          "end_index": 57,
+          "nodes": [
+            {
+              "title": "4.7.1 Universities and institutions Deemed to be Universities falling under Category I/II as per UGC (Categorization of Universities (Only) for grant of Graded Autonomy) Regulations, 2018;",
+              "node_id": "0105",
+              "start_index": 57,
+              "end_index": 57,
+              "nodes": [
+                {
+                  "title": "NOTE",
+                  "node_id": "0106",
+                  "start_index": 57,
+                  "end_index": 57
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "4.8 Grant of Approval shall be as per Clause 1.10 of the Approval Process Handbook",
+          "node_id": "0107",
+          "start_index": 57,
+          "end_index": 57
+        },
+        {
+          "title": "4.9 Other Conditions",
+          "node_id": "0108",
+          "start_index": 58,
+          "end_index": 58
+        },
+        {
+          "title": "4.10 Security Deposit (SD) :",
+          "node_id": "0109",
+          "start_index": 58,
+          "end_index": 58
+        },
+        {
+          "title": "4.12 Applications submitted for other Categories in Chapter II/ III of the Approval Process Handbook",
+          "node_id": "0110",
+          "start_index": 59,
+          "end_index": 59,
+          "nodes": [
+            {
+              "title": "NOTE",
+              "node_id": "0111",
+              "start_index": 59,
+              "end_index": 59
+            }
+          ]
+        },
+        {
+          "title": "4.14 Extension of Approval shall not be granted after the last date as mentioned in the Academic Calendar.",
+          "node_id": "0112",
+          "start_index": 59,
+          "end_index": 59
+        },
+        {
+          "title": "4.15 Institutional information shall be updated on AICTE Web-Portal by the Institution for downloading the Extension of Approval letter.",
+          "node_id": "0113",
+          "start_index": 59,
+          "end_index": 59
+        },
+        {
+          "title": "4.16 Students\u2019 eligibility for admission shall be as per Annexure-8 of the Approval Process Handbook.",
+          "node_id": "0114",
+          "start_index": 59,
+          "end_index": 59
+        },
+        {
+          "title": "4.17 All Universities shall follow the Academic Calendar as notified by the Council from time to time.",
+          "node_id": "0115",
+          "start_index": 59,
+          "end_index": 59
+        },
+        {
+          "title": "4.18 Student enrolment details shall be uploaded on the AICTE Web-Portal before last date (Academic Calendar for the respective year).",
+          "node_id": "0116",
+          "start_index": 59,
+          "end_index": 60
+        }
+      ]
+    },
+    {
+      "title": "CHAPTER-V",
+      "node_id": "0117",
+      "start_index": 61,
+      "end_index": 68,
+      "nodes": [
+        {
+          "title": "5.1 Introduction",
+          "node_id": "0118",
+          "start_index": 61,
+          "end_index": 61,
+          "nodes": [
+            {
+              "title": "NOTE 1",
+              "node_id": "0119",
+              "start_index": 61,
+              "end_index": 61
+            }
+          ]
+        },
+        {
+          "title": "5.3 Norms and Standards",
+          "node_id": "0120",
+          "start_index": 62,
+          "end_index": 68,
+          "nodes": [
+            {
+              "title": "5.3.2. Learner\u2019s enrolment:",
+              "node_id": "0121",
+              "start_index": 62,
+              "end_index": 62
+            },
+            {
+              "title": "5.3.3. Academic and Administrative Requirements",
+              "node_id": "0122",
+              "start_index": 62,
+              "end_index": 63
+            },
+            {
+              "title": "5.3.4. Infrastructure Requirements",
+              "node_id": "0123",
+              "start_index": 63,
+              "end_index": 63
+            },
+            {
+              "title": "5.3.5 Academic Requirements",
+              "node_id": "0124",
+              "start_index": 64,
+              "end_index": 64
+            },
+            {
+              "title": "5.3.6. Duration and Entry Level Qualifications",
+              "node_id": "0125",
+              "start_index": 64,
+              "end_index": 65
+            },
+            {
+              "title": "5.3.8. Grant of Approval",
+              "node_id": "0126",
+              "start_index": 66,
+              "end_index": 66
+            },
+            {
+              "title": "5.3.9. TER Charges",
+              "node_id": "0127",
+              "start_index": 66,
+              "end_index": 67,
+              "nodes": [
+                {
+                  "title": "NOTE",
+                  "node_id": "0128",
+                  "start_index": 66,
+                  "end_index": 67
+                }
+              ]
+            },
+            {
+              "title": "5.3.10. Approval Procedure",
+              "node_id": "0129",
+              "start_index": 67,
+              "end_index": 67
+            },
+            {
+              "title": "5.3.11. Others",
+              "node_id": "0130",
+              "start_index": 67,
+              "end_index": 68
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CHAPTER-VI",
+      "node_id": "0131",
+      "start_index": 69,
+      "end_index": 85,
+      "nodes": [
+        {
+          "title": "6.1 All the Documents submitted along with the online Applications for Starting a New Technical Institution under Chapter shall be as per the Annexure-1 of the Approval Process Handbook.",
+          "node_id": "0132",
+          "start_index": 69,
+          "end_index": 69
+        },
+        {
+          "title": "6.3 The Technical Institutions offering Technical Programs / Courses shall follow \u201cAcademic Calendar\u201d as notified by the Council from time to time.",
+          "node_id": "0133",
+          "start_index": 69,
+          "end_index": 69
+        },
+        {
+          "title": "6.6 The concerned State Government/ UT Admission Authority shall decide modalities for the admission.",
+          "node_id": "0134",
+          "start_index": 69,
+          "end_index": 70
+        },
+        {
+          "title": "6.12 Institutes having less Enrolment/ Poor Academic Performance",
+          "node_id": "0135",
+          "start_index": 70,
+          "end_index": 70
+        },
+        {
+          "title": "a. Institutions having less enrolment",
+          "node_id": "0136",
+          "start_index": 70,
+          "end_index": 70
+        },
+        {
+          "title": "6.13 Admission to Lateral Entry to Second Year Course(s)",
+          "node_id": "0137",
+          "start_index": 70,
+          "end_index": 72,
+          "nodes": [
+            {
+              "title": "6.13 Admission to Lateral Entry to Second Year Course(s) (intro)",
+              "start_index": 70,
+              "end_index": 71,
+              "node_id": "0138"
+            },
+            {
+              "title": "NOTE",
+              "node_id": "0139",
+              "start_index": 71,
+              "end_index": 72
+            }
+          ]
+        },
+        {
+          "title": "6.15 The Technical Institutions shall follow Faculty Cadre and Qualifications as per:",
+          "node_id": "0140",
+          "start_index": 72,
+          "end_index": 72,
+          "nodes": [
+            {
+              "title": "NOTE",
+              "node_id": "0141",
+              "start_index": 72,
+              "end_index": 72
+            }
+          ]
+        },
+        {
+          "title": "6.17 The Technical Institutions shall follow Norms for Built-up requirements as provided in Annexure-3 of the Approval Process Handbook.",
+          "node_id": "0142",
+          "start_index": 72,
+          "end_index": 75,
+          "nodes": [
+            {
+              "title": "6.17 The Technical Institutions shall follow Norms for Built-up requirements as provided in Annexure-3 of the Approval Process Handbook. (intro)",
+              "start_index": 72,
+              "end_index": 74,
+              "node_id": "0143"
+            },
+            {
+              "title": "NOTE",
+              "node_id": "0144",
+              "start_index": 74,
+              "end_index": 75
+            }
+          ]
+        },
+        {
+          "title": "c. Requirements and Eligibility",
+          "node_id": "0145",
+          "start_index": 75,
+          "end_index": 75
+        },
+        {
+          "title": "d. Admission Procedure",
+          "node_id": "0146",
+          "start_index": 75,
+          "end_index": 76
+        },
+        {
+          "title": "e. Admission Procedure",
+          "node_id": "0147",
+          "start_index": 76,
+          "end_index": 84
+        },
+        {
+          "title": "h. First Aid, Medical and counselling facilities",
+          "node_id": "0148",
+          "start_index": 84,
+          "end_index": 85,
+          "nodes": [
+            {
+              "title": "NOTE",
+              "node_id": "0149",
+              "start_index": 84,
+              "end_index": 85
+            },
+            {
+              "title": "NOTE-1",
+              "node_id": "0150",
+              "start_index": 85,
+              "end_index": 85
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CHAPTER-VII",
+      "node_id": "0151",
+      "start_index": 86,
+      "end_index": 90,
+      "nodes": [
+        {
+          "title": "7.1 Introduction",
+          "node_id": "0152",
+          "start_index": 86,
+          "end_index": 86,
+          "nodes": [
+            {
+              "title": "NOTE",
+              "node_id": "0153",
+              "start_index": 86,
+              "end_index": 86
+            }
+          ]
+        },
+        {
+          "title": "7.2 Un-approved Technical Programmes/ Course(s) offered by an Institution",
+          "node_id": "0154",
+          "start_index": 86,
+          "end_index": 86
+        },
+        {
+          "title": "7.3 Penal Action against the Institution in case of Violation of the AICTE Norms and Regulations",
+          "node_id": "0155",
+          "start_index": 86,
+          "end_index": 86,
+          "nodes": [
+            {
+              "title": "a. Suspension of approval for NRI and supernumerary seats, if any, for one Academic Year",
+              "node_id": "0156",
+              "start_index": 86,
+              "end_index": 86
+            },
+            {
+              "title": "c. No admission in one/ more Course(s) for one Academic Year",
+              "node_id": "0157",
+              "start_index": 86,
+              "end_index": 86
+            },
+            {
+              "title": "f. Withdrawal of approval of the Institution/University",
+              "node_id": "0158",
+              "start_index": 86,
+              "end_index": 86
+            },
+            {
+              "title": "h. Not eligible to receive any grant from AICTE",
+              "node_id": "0159",
+              "start_index": 86,
+              "end_index": 86
+            }
+          ]
+        },
+        {
+          "title": "7.4 Institutions violating the following shall invite appropriate penal action as per Clause 7.3 :",
+          "node_id": "0160",
+          "start_index": 87,
+          "end_index": 87
+        },
+        {
+          "title": "b. Non-Fulfilment of Requirement of Qualified Principal/ Director",
+          "node_id": "0161",
+          "start_index": 87,
+          "end_index": 87,
+          "nodes": [
+            {
+              "title": "NOTE",
+              "node_id": "0162",
+              "start_index": 87,
+              "end_index": 87
+            }
+          ]
+        },
+        {
+          "title": "e. Non-Fulfilment of Essential Requirements",
+          "node_id": "0163",
+          "start_index": 87,
+          "end_index": 87
+        },
+        {
+          "title": "g. Excess Admission",
+          "node_id": "0164",
+          "start_index": 87,
+          "end_index": 87
+        },
+        {
+          "title": "h. Violation of Admission Eligibility Norms",
+          "node_id": "0165",
+          "start_index": 87,
+          "end_index": 88
+        },
+        {
+          "title": "7.5 Violation of Norms in case of Collaboration and Twinning Programme",
+          "node_id": "0166",
+          "start_index": 88,
+          "end_index": 89
+        },
+        {
+          "title": "7.6 Fee Refund Cases",
+          "node_id": "0167",
+          "start_index": 89,
+          "end_index": 89,
+          "nodes": [
+            {
+              "title": "NOTE",
+              "node_id": "0168",
+              "start_index": 89,
+              "end_index": 89
+            }
+          ]
+        },
+        {
+          "title": "7.7 Security Deposit",
+          "node_id": "0169",
+          "start_index": 89,
+          "end_index": 89
+        },
+        {
+          "title": "7.9 Penalty amount shall be paid online to the Council as per the instructions.",
+          "node_id": "0170",
+          "start_index": 89,
+          "end_index": 89
+        },
+        {
+          "title": "7.10 Complaint Cases",
+          "node_id": "0171",
+          "start_index": 89,
+          "end_index": 90
+        },
+        {
+          "title": "7.11 Procedure for Restoration against Punitive Action",
+          "node_id": "0172",
+          "start_index": 90,
+          "end_index": 90
+        }
+      ]
+    },
+    {
+      "title": "CHAPTER-VIII",
+      "node_id": "0173",
+      "start_index": 91,
+      "end_index": 92
+    },
+    {
+      "title": "ANNEXURE-1",
+      "node_id": "0174",
+      "start_index": 93,
+      "end_index": 96
+    },
+    {
+      "title": "ANNEXURE-2",
+      "node_id": "0175",
+      "start_index": 97,
+      "end_index": 101
+    },
+    {
+      "title": "ANNEXURE-3",
+      "node_id": "0176",
+      "start_index": 102,
+      "end_index": 107,
+      "nodes": [
+        {
+          "title": "ANNEXURE-3 (intro)",
+          "start_index": 102,
+          "end_index": 103,
+          "node_id": "0177"
+        },
+        {
+          "title": "A. Engineering and Technology (Diploma/Under Graduate/ Post Graduate Degree/ Integrated/Dual Degree) Institutions",
+          "node_id": "0178",
+          "start_index": 103,
+          "end_index": 104
+        },
+        {
+          "title": "B. Planning (Under Graduate/ Post Graduate Degree/ Integrated Degree) Institution (Up to an intake of 120)",
+          "node_id": "0179",
+          "start_index": 104,
+          "end_index": 104
+        },
+        {
+          "title": "D. Design (Diploma/ Under Graduate/ Post Graduate Degree) Institution(Up to an intake of 150)",
+          "node_id": "0180",
+          "start_index": 105,
+          "end_index": 105
+        },
+        {
+          "title": "F. Computer Applications UG/PG/ Integrated Degree Institution (Up to an intake of 300)",
+          "node_id": "0181",
+          "start_index": 105,
+          "end_index": 105
+        },
+        {
+          "title": "G. Management (UG/PG/ Integrated Degree) Institution (Up to an intake of 360)",
+          "node_id": "0182",
+          "start_index": 105,
+          "end_index": 107,
+          "nodes": [
+            {
+              "title": "G. Management (UG/PG/ Integrated Degree) Institution (Up to an intake of 360) (intro)",
+              "start_index": 105,
+              "end_index": 107,
+              "node_id": "0183"
+            },
+            {
+              "title": "NOTE",
+              "node_id": "0184",
+              "start_index": 107,
+              "end_index": 107
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ANNEXURE-4",
+      "node_id": "0185",
+      "start_index": 108,
+      "end_index": 110,
+      "nodes": [
+        {
+          "title": "Planning",
+          "node_id": "0186",
+          "start_index": 108,
+          "end_index": 108
+        },
+        {
+          "title": "Design",
+          "node_id": "0187",
+          "start_index": 108,
+          "end_index": 109
+        },
+        {
+          "title": "Programme",
+          "node_id": "0188",
+          "start_index": 109,
+          "end_index": 110
+        },
+        {
+          "title": "Programme",
+          "node_id": "0189",
+          "start_index": 110,
+          "end_index": 110
+        }
+      ]
+    },
+    {
+      "title": "ANNEXURE-5",
+      "node_id": "0190",
+      "start_index": 111,
+      "end_index": 112
+    },
+    {
+      "title": "Principal/ Director",
+      "node_id": "0191",
+      "start_index": 112,
+      "end_index": 112,
+      "nodes": [
+        {
+          "title": "Management",
+          "node_id": "0192",
+          "start_index": 112,
+          "end_index": 112
+        }
+      ]
+    },
+    {
+      "title": "ANNEXURE-6",
+      "node_id": "0193",
+      "start_index": 113,
+      "end_index": 115
+    },
+    {
+      "title": "ANNEXURE-7",
+      "node_id": "0194",
+      "start_index": 116,
+      "end_index": 116
+    },
+    {
+      "title": "ANNEXURE-8",
+      "node_id": "0195",
+      "start_index": 117,
+      "end_index": 126,
+      "nodes": [
+        {
+          "title": "ANNEXURE-8 (intro)",
+          "start_index": 117,
+          "end_index": 118,
+          "node_id": "0196"
+        },
+        {
+          "title": "8.1 Diploma Course:",
+          "node_id": "0197",
+          "start_index": 118,
+          "end_index": 118
+        },
+        {
+          "title": "Eligibility",
+          "node_id": "0198",
+          "start_index": 118,
+          "end_index": 118
+        },
+        {
+          "title": "Eligibility",
+          "node_id": "0199",
+          "start_index": 118,
+          "end_index": 119
+        },
+        {
+          "title": "Eligibility",
+          "node_id": "0200",
+          "start_index": 119,
+          "end_index": 121,
+          "nodes": [
+            {
+              "title": "Eligibility (intro)",
+              "start_index": 119,
+              "end_index": 120,
+              "node_id": "0201"
+            },
+            {
+              "title": "B. Voc. in relevant discipline",
+              "node_id": "0202",
+              "start_index": 120,
+              "end_index": 121,
+              "nodes": [
+                {
+                  "title": "B. Voc. in relevant discipline (intro)",
+                  "start_index": 120,
+                  "end_index": 121,
+                  "node_id": "0203"
+                },
+                {
+                  "title": "NOTE",
+                  "node_id": "0204",
+                  "start_index": 121,
+                  "end_index": 121
+                }
+              ]
+            },
+            {
+              "title": "8.3 Post Graduate Diploma / Post Graduate Degree / Post Graduate Certificate",
+              "node_id": "0205",
+              "start_index": 121,
+              "end_index": 121
+            }
+          ]
+        },
+        {
+          "title": "Duration",
+          "node_id": "0206",
+          "start_index": 121,
+          "end_index": 121
+        },
+        {
+          "title": "Eligibility",
+          "node_id": "0207",
+          "start_index": 121,
+          "end_index": 124,
+          "nodes": [
+            {
+              "title": "Eligibility (intro)",
+              "start_index": 121,
+              "end_index": 124,
+              "node_id": "0208"
+            },
+            {
+              "title": "8.5 Integrated / Dual Degree Courses",
+              "node_id": "0209",
+              "start_index": 124,
+              "end_index": 124
+            }
+          ]
+        },
+        {
+          "title": "Eligibility",
+          "node_id": "0210",
+          "start_index": 124,
+          "end_index": 125,
+          "nodes": [
+            {
+              "title": "Eligibility (intro)",
+              "start_index": 124,
+              "end_index": 125,
+              "node_id": "0211"
+            },
+            {
+              "title": "8.6 Fellow Programme",
+              "node_id": "0212",
+              "start_index": 125,
+              "end_index": 125
+            }
+          ]
+        },
+        {
+          "title": "Duration",
+          "node_id": "0213",
+          "start_index": 125,
+          "end_index": 126,
+          "nodes": [
+            {
+              "title": "8.8 Open Distance Learning / Online Learning Courses",
+              "node_id": "0214",
+              "start_index": 125,
+              "end_index": 126
+            }
+          ]
+        },
+        {
+          "title": "Eligibility",
+          "node_id": "0215",
+          "start_index": 126,
+          "end_index": 126
+        }
+      ]
+    },
+    {
+      "title": "ANNEXURE-9",
+      "node_id": "0216",
+      "start_index": 127,
+      "end_index": 127,
+      "nodes": [
+        {
+          "title": "Procedure",
+          "node_id": "0217",
+          "start_index": 127,
+          "end_index": 127
+        }
+      ]
+    },
+    {
+      "title": "ANNEXURE-10",
+      "node_id": "0218",
+      "start_index": 128,
+      "end_index": 128
+    },
+    {
+      "title": "ANNEXURE-11",
+      "node_id": "0219",
+      "start_index": 129,
+      "end_index": 156,
+      "nodes": [
+        {
+          "title": "ANNEXURE-11 (intro)",
+          "start_index": 129,
+          "end_index": 146,
+          "node_id": "0220"
+        },
+        {
+          "title": "NOTE",
+          "node_id": "0221",
+          "start_index": 146,
+          "end_index": 156
+        }
+      ]
+    },
+    {
+      "title": "ANNEXURE-12",
+      "node_id": "0222",
+      "start_index": 157,
+      "end_index": 164,
+      "nodes": [
+        {
+          "title": "ANNEXURE-12 (intro)",
+          "start_index": 157,
+          "end_index": 161,
+          "node_id": "0223"
+        },
+        {
+          "title": "9. Navy Entry Artificer/ Diploma in Mechanical and Electrical",
+          "node_id": "0224",
+          "start_index": 161,
+          "end_index": 164
+        }
+      ]
+    },
+    {
+      "title": "Surface Coating Technology",
+      "node_id": "0225",
+      "start_index": 164,
+      "end_index": 164
+    },
+    {
+      "title": "Chemical Engineering (Oil Technology)",
+      "node_id": "0226",
+      "start_index": 164,
+      "end_index": 164
+    },
+    {
+      "title": "Civil Engineering (Construction Technology)",
+      "node_id": "0227",
+      "start_index": 164,
+      "end_index": 164
+    },
+    {
+      "title": "Civil and Environmental Engineering",
+      "node_id": "0228",
+      "start_index": 164,
+      "end_index": 164
+    },
+    {
+      "title": "Civil Engineering",
+      "node_id": "0229",
+      "start_index": 164,
+      "end_index": 164
+    },
+    {
+      "title": "Geo informatics and Surveying Technology",
+      "node_id": "0230",
+      "start_index": 164,
+      "end_index": 164
+    },
+    {
+      "title": "3- D Animation and Graphics",
+      "node_id": "0231",
+      "start_index": 164,
+      "end_index": 164
+    },
+    {
+      "title": "Computer Engineering Computer Science and Engineering",
+      "node_id": "0232",
+      "start_index": 164,
+      "end_index": 164
+    },
+    {
+      "title": "Information Technology and Engineering",
+      "node_id": "0233",
+      "start_index": 164,
+      "end_index": 165
+    },
+    {
+      "title": "Dairy Engineering",
+      "node_id": "0234",
+      "start_index": 165,
+      "end_index": 165
+    },
+    {
+      "title": "Electrical Engineering Electrical and Electronics Engineering",
+      "node_id": "0235",
+      "start_index": 165,
+      "end_index": 165
+    },
+    {
+      "title": "Electrical and Power Engineering",
+      "node_id": "0236",
+      "start_index": 165,
+      "end_index": 165
+    },
+    {
+      "title": "Advanced Electronics and Communication Engineering",
+      "node_id": "0237",
+      "start_index": 165,
+      "end_index": 165
+    },
+    {
+      "title": "Digital Electronics",
+      "node_id": "0238",
+      "start_index": 165,
+      "end_index": 165
+    },
+    {
+      "title": "Electronics and Communication Engineering",
+      "node_id": "0239",
+      "start_index": 165,
+      "end_index": 165
+    },
+    {
+      "title": "Electronics and Telecommunication Engineering",
+      "node_id": "0240",
+      "start_index": 165,
+      "end_index": 165
+    },
+    {
+      "title": "Electronics and Electrical Engineering",
+      "node_id": "0241",
+      "start_index": 165,
+      "end_index": 166
+    },
+    {
+      "title": "Energy Engineering and Technology",
+      "node_id": "0242",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Environmental Engineering",
+      "node_id": "0243",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Opto-Electronics Engineering",
+      "node_id": "0244",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Power Electronics",
+      "node_id": "0245",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Fire Technology and Safety",
+      "node_id": "0246",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Fisherier Technology",
+      "node_id": "0247",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Automation Engineering",
+      "node_id": "0248",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Instrumentation Engineering",
+      "node_id": "0249",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Medical Electronics Engineering",
+      "node_id": "0250",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Footwear Technology",
+      "node_id": "0251",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Leather Technology",
+      "node_id": "0252",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Marine Engineering",
+      "node_id": "0253",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Industrial and Production Engineering",
+      "node_id": "0254",
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "title": "Mechanical Engineering",
+      "node_id": "0255",
+      "start_index": 166,
+      "end_index": 167
+    },
+    {
+      "title": "Mechatornics",
+      "node_id": "0256",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Mining Engineering",
+      "node_id": "0257",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Printing and Packing Technology",
+      "node_id": "0258",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Petroleum Engineering",
+      "node_id": "0259",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Pharmaceutical Chemistry and Technology",
+      "node_id": "0260",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Plastic and Polymer Engineering",
+      "node_id": "0261",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Pulp Technology",
+      "node_id": "0262",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Poultry Engineering and Technology",
+      "node_id": "0263",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Textile Processing Technology",
+      "node_id": "0264",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Rubber Technology",
+      "node_id": "0265",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "Cement Technology",
+      "node_id": "0266",
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "title": "ANNEXURE-13",
+      "node_id": "0267",
+      "start_index": 168,
+      "end_index": 168
+    },
+    {
+      "title": "Agriculture Engineering",
+      "node_id": "0268",
+      "start_index": 168,
+      "end_index": 168
+    },
+    {
+      "title": "Architecture",
+      "node_id": "0269",
+      "start_index": 168,
+      "end_index": 168
+    },
+    {
+      "title": "Biotechnology",
+      "node_id": "0270",
+      "start_index": 168,
+      "end_index": 168
+    },
+    {
+      "title": "Ceramic Engineering",
+      "node_id": "0271",
+      "start_index": 168,
+      "end_index": 168
+    },
+    {
+      "title": "Chemical Engineering",
+      "node_id": "0272",
+      "start_index": 168,
+      "end_index": 169
+    },
+    {
+      "title": "Computer Science and Engineering",
+      "node_id": "0273",
+      "start_index": 169,
+      "end_index": 169
+    },
+    {
+      "title": "Electrical Engineering",
+      "node_id": "0274",
+      "start_index": 169,
+      "end_index": 170
+    },
+    {
+      "title": "Fire and Safety Engineering",
+      "node_id": "0275",
+      "start_index": 170,
+      "end_index": 170
+    },
+    {
+      "title": "Food Engineering",
+      "node_id": "0276",
+      "start_index": 170,
+      "end_index": 171
+    },
+    {
+      "title": "Metallurgy Engineering",
+      "node_id": "0277",
+      "start_index": 171,
+      "end_index": 171
+    },
+    {
+      "title": "Military Engineering",
+      "node_id": "0278",
+      "start_index": 171,
+      "end_index": 172
+    },
+    {
+      "title": "Packaging Technology",
+      "node_id": "0279",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Pharmaceutical Engineering",
+      "node_id": "0280",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Printing Engineering",
+      "node_id": "0281",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Textile Engineering",
+      "node_id": "0282",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Biomedical Engineering",
+      "node_id": "0283",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Multimedia Technology",
+      "node_id": "0284",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Office Management/ Commercial Practice",
+      "node_id": "0285",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Rubber",
+      "node_id": "0286",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Cosmetology",
+      "node_id": "0287",
+      "start_index": 172,
+      "end_index": 172
+    },
+    {
+      "title": "Cinematography",
+      "node_id": "0288",
+      "start_index": 172,
+      "end_index": 173
+    },
+    {
+      "title": "Journalism and Mass Communication",
+      "node_id": "0289",
+      "start_index": 173,
+      "end_index": 173
+    },
+    {
+      "title": "Engineering Education",
+      "node_id": "0290",
+      "start_index": 173,
+      "end_index": 173
+    },
+    {
+      "title": "Fisheries Technology",
+      "node_id": "0291",
+      "start_index": 173,
+      "end_index": 173
+    },
+    {
+      "title": "Home Science",
+      "node_id": "0292",
+      "start_index": 173,
+      "end_index": 173
+    },
+    {
+      "title": "Jewellery Design and Manufacture Technology",
+      "node_id": "0293",
+      "start_index": 173,
+      "end_index": 173
+    },
+    {
+      "title": "Library and Information Science",
+      "node_id": "0294",
+      "start_index": 173,
+      "end_index": 173
+    },
+    {
+      "title": "Travel and Tourism",
+      "node_id": "0295",
+      "start_index": 173,
+      "end_index": 173
+    },
+    {
+      "title": "Wood Technology",
+      "node_id": "0296",
+      "start_index": 173,
+      "end_index": 174
+    },
+    {
+      "title": "Aeronautical Engineering",
+      "node_id": "0297",
+      "start_index": 174,
+      "end_index": 174
+    },
+    {
+      "title": "Architecture and Planning",
+      "node_id": "0298",
+      "start_index": 174,
+      "end_index": 176
+    },
+    {
+      "title": "Energy Engineering",
+      "node_id": "0299",
+      "start_index": 176,
+      "end_index": 176
+    },
+    {
+      "title": "Electronics Engineering",
+      "node_id": "0300",
+      "start_index": 176,
+      "end_index": 178
+    },
+    {
+      "title": "Fisheries Engineering",
+      "node_id": "0301",
+      "start_index": 178,
+      "end_index": 178
+    },
+    {
+      "title": "Nano Technology",
+      "node_id": "0302",
+      "start_index": 178,
+      "end_index": 178
+    },
+    {
+      "title": "Nuclear Science And Technology",
+      "node_id": "0303",
+      "start_index": 178,
+      "end_index": 178
+    },
+    {
+      "title": "Poultry Engineering",
+      "node_id": "0304",
+      "start_index": 178,
+      "end_index": 178
+    },
+    {
+      "title": "Pulp Engineering",
+      "node_id": "0305",
+      "start_index": 178,
+      "end_index": 178
+    },
+    {
+      "title": "ANNEXURE-14",
+      "node_id": "0306",
+      "start_index": 179,
+      "end_index": 182
+    },
+    {
+      "title": "North Western Region",
+      "node_id": "0307",
+      "start_index": 182,
+      "end_index": 184
+    },
+    {
+      "title": "Site Plan",
+      "node_id": "0308",
+      "start_index": 184,
+      "end_index": 184
+    },
+    {
+      "title": "Southern Region",
+      "node_id": "0309",
+      "start_index": 185,
+      "end_index": 185
+    },
+    {
+      "title": "South Western Region",
+      "node_id": "0310",
+      "start_index": 185,
+      "end_index": 185
+    },
+    {
+      "title": "Western Region",
+      "node_id": "0311",
+      "start_index": 185,
+      "end_index": 185
+    },
+    {
+      "title": "ANNEXURE-15",
+      "node_id": "0312",
+      "start_index": 186,
+      "end_index": 188,
+      "nodes": [
+        {
+          "title": "b. Application Procedure",
+          "node_id": "0313",
+          "start_index": 186,
+          "end_index": 186
+        },
+        {
+          "title": "c. Selection Criteria",
+          "node_id": "0314",
+          "start_index": 186,
+          "end_index": 187
+        },
+        {
+          "title": "d. Number of Research Fellows per Guide",
+          "node_id": "0315",
+          "start_index": 187,
+          "end_index": 187
+        },
+        {
+          "title": "e. Research Advisory Committee",
+          "node_id": "0316",
+          "start_index": 187,
+          "end_index": 188
+        }
+      ]
+    },
+    {
+      "title": "Course Title",
+      "node_id": "0317",
+      "start_index": 188,
+      "end_index": 191,
+      "nodes": [
+        {
+          "title": "Research Methodology",
+          "node_id": "0318",
+          "start_index": 188,
+          "end_index": 188
+        },
+        {
+          "title": "b. Details of Courses and Seminar",
+          "node_id": "0319",
+          "start_index": 188,
+          "end_index": 188
+        },
+        {
+          "title": "c. Duration for earning Credit",
+          "node_id": "0320",
+          "start_index": 188,
+          "end_index": 188
+        },
+        {
+          "title": "d. Credit Course Requirement",
+          "node_id": "0321",
+          "start_index": 188,
+          "end_index": 188
+        },
+        {
+          "title": "e. Grading System of Credit Courses/Seminar",
+          "node_id": "0322",
+          "start_index": 188,
+          "end_index": 190
+        },
+        {
+          "title": "f. Selection of Examiners",
+          "node_id": "0323",
+          "start_index": 190,
+          "end_index": 190
+        },
+        {
+          "title": "g. Submission of Thesis",
+          "node_id": "0324",
+          "start_index": 190,
+          "end_index": 190
+        },
+        {
+          "title": "h. Recommendations of the Examiners",
+          "node_id": "0325",
+          "start_index": 190,
+          "end_index": 191
+        }
+      ]
+    },
+    {
+      "title": "ANNEXURE-16",
+      "node_id": "0326",
+      "start_index": 192,
+      "end_index": 194
+    },
+    {
+      "title": "ANNEXURE-17",
+      "node_id": "0327",
+      "start_index": 195,
+      "end_index": 195
+    },
+    {
+      "title": "ANNEXURE-18",
+      "node_id": "0328",
+      "start_index": 196,
+      "end_index": 200,
+      "nodes": [
+        {
+          "title": "ANNEXURE-18 (intro)",
+          "start_index": 196,
+          "end_index": 200,
+          "node_id": "0329"
+        },
+        {
+          "title": "NOTE",
+          "node_id": "0330",
+          "start_index": 200,
+          "end_index": 200
+        }
+      ]
+    },
+    {
+      "title": "AFFIDAVIT-1",
+      "node_id": "0331",
+      "start_index": 201,
+      "end_index": 201
+    },
+    {
+      "title": "AFFIDAVIT-2",
+      "node_id": "0332",
+      "start_index": 202,
+      "end_index": 204
+    },
+    {
+      "title": "AFFIDAVIT-3",
+      "node_id": "0333",
+      "start_index": 205,
+      "end_index": 205
+    },
+    {
+      "title": "AFFIDAVIT-4",
+      "node_id": "0334",
+      "start_index": 206,
+      "end_index": 206
+    },
+    {
+      "title": "AFFIDAVIT-5",
+      "node_id": "0335",
+      "start_index": 207,
+      "end_index": 207
+    },
+    {
+      "title": "AFFIDAVIT-6",
+      "node_id": "0336",
+      "start_index": 208,
+      "end_index": 208
+    },
+    {
+      "title": "AFFIDAVIT-7",
+      "node_id": "0337",
+      "start_index": 209,
+      "end_index": 209
+    },
+    {
+      "title": "AFFIDAVIT-8",
+      "node_id": "0338",
+      "start_index": 210,
+      "end_index": 210
+    },
+    {
+      "title": "AFFIDAVIT-9",
+      "node_id": "0339",
+      "start_index": 211,
+      "end_index": 211
+    },
+    {
+      "title": "AFFIDAVIT-10",
+      "node_id": "0340",
+      "start_index": 212,
+      "end_index": 212
+    },
+    {
+      "title": "AFFIDAVIT-11",
+      "node_id": "0341",
+      "start_index": 213,
+      "end_index": 213
+    },
+    {
+      "title": "AFFIDAVIT-12",
+      "node_id": "0342",
+      "start_index": 214,
+      "end_index": 214
+    },
+    {
+      "title": "AFFIDAVIT-13",
+      "node_id": "0343",
+      "start_index": 215,
+      "end_index": 216
+    },
+    {
+      "title": "VERIFICATION",
+      "node_id": "0344",
+      "start_index": 216,
+      "end_index": 220,
+      "nodes": [
+        {
+          "title": "VERIFICATION (intro)",
+          "start_index": 216,
+          "end_index": 217,
+          "node_id": "0345"
+        },
+        {
+          "title": "NOTE",
+          "node_id": "0346",
+          "start_index": 217,
+          "end_index": 220
+        }
+      ]
+    },
+    {
+      "title": "FORMAT-3",
+      "node_id": "0347",
+      "start_index": 221,
+      "end_index": 222
+    },
+    {
+      "title": "FORMAT-4",
+      "node_id": "0348",
+      "start_index": 223,
+      "end_index": 225
+    },
+    {
+      "title": "CERTIFICATE-1",
+      "node_id": "0349",
+      "start_index": 226,
+      "end_index": 227,
+      "nodes": [
+        {
+          "title": "A. Trust/ Society/ Company Registration Documents:",
+          "node_id": "0350",
+          "start_index": 226,
+          "end_index": 226
+        },
+        {
+          "title": "B. Land Documents:",
+          "node_id": "0351",
+          "start_index": 226,
+          "end_index": 226
+        },
+        {
+          "title": "C. Land Use Certificate:",
+          "node_id": "0352",
+          "start_index": 226,
+          "end_index": 227
+        },
+        {
+          "title": "D. Land Conversion Certificate:",
+          "node_id": "0353",
+          "start_index": 227,
+          "end_index": 227
+        },
+        {
+          "title": "E. Land Classification Certificate:",
+          "node_id": "0354",
+          "start_index": 227,
+          "end_index": 227
+        }
+      ]
+    },
+    {
+      "title": "CERTIFICATE-2",
+      "node_id": "0355",
+      "start_index": 228,
+      "end_index": 228,
+      "nodes": [
+        {
+          "title": "Completion of Flooring",
+          "node_id": "0356",
+          "start_index": 228,
+          "end_index": 228
+        }
+      ]
+    },
+    {
+      "title": "CERTIFICATE-3",
+      "node_id": "0357",
+      "start_index": 229,
+      "end_index": 231,
+      "nodes": [
+        {
+          "title": "A. Bank Statement",
+          "node_id": "0358",
+          "start_index": 229,
+          "end_index": 229
+        },
+        {
+          "title": "B. Fixed Deposits",
+          "node_id": "0359",
+          "start_index": 229,
+          "end_index": 231
+        }
+      ]
+    }
+  ],
+  "doc_title": "Approval Process Handbook 2024-25 to 2026-27"
+}
