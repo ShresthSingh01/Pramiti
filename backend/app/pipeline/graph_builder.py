@@ -111,6 +111,14 @@ def build_evidence_graph(
                     is_conflict_fact = True
             except ValueError:
                 pass
+        elif field_name == "faculty_cadre_ratio":
+            try:
+                parts = raw_val.split(":")
+                r_num = float(parts[-1]) if len(parts) > 1 else float(raw_val)
+                if r_num > 20.0:
+                    is_conflict_fact = True
+            except ValueError:
+                pass
 
         fact_node = {
             "id": fact_node_id,
@@ -213,7 +221,34 @@ def build_evidence_graph(
         except Exception:
             pass
 
-    # 7. Legal Entity Name Consistency Edges
+    # 7. Faculty-to-Student Cadre Ratio Deficit -> AICTE Norms Authority
+    fsr_nodes = [n for n in nodes if n.get("type") == "fact" and n.get("field") == "faculty_cadre_ratio"]
+    for fn in fsr_nodes:
+        val = str(fn.get("value", ""))
+        try:
+            parts = val.split(":")
+            r_num = float(parts[-1]) if len(parts) > 1 else float(val)
+            is_fsr_deficit = r_num > 20.0
+            edges.append({
+                "id": f"edge_fsr_{fn['id']}",
+                "source": fn["id"],
+                "target": "auth_aicte",
+                "relation": "statutory_cadre_norm_evaluation",
+                "label": f"FSR DEFICIT: {val} > 1:20" if is_fsr_deficit else f"FSR Compliant ({val})",
+                "status": "conflict" if is_fsr_deficit else "normal",
+                "severity": "critical" if is_fsr_deficit else "low",
+                "clause": "AICTE Approval Process Handbook (APH 2025-26), Chapter VII, Table 7.1",
+                "reason": (
+                    f"Faculty cadre register calculates to {val}, failing the mandatory statutory ceiling of 1:20. "
+                    f"Cadre deficit in Professor and Associate Professor cadres."
+                ) if is_fsr_deficit else "Faculty cadre register compliant with 1:20 student ratio norms.",
+                "source_a": f"Certified Faculty Cadre List: '{val}'",
+                "remediation": "Recruit qualified Professor and Associate Professor cadres to restore 1:20 ratio."
+            })
+        except Exception:
+            pass
+
+    # 8. Legal Entity Name Consistency Edges
     inst_nodes = [n for n in nodes if n.get("type") == "fact" and n.get("field") == "institution_name"]
     for i in range(len(inst_nodes) - 1):
         edges.append({

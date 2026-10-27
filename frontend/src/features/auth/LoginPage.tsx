@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, LogIn, Lock, UserCheck, AlertCircle, Sparkles } from 'lucide-react';
+import { ShieldCheck, LogIn, Lock, UserCheck, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../../assets/logo.png';
 import api from '../../lib/api';
@@ -204,9 +204,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           </button>
         </form>
 
-        {/* Demo Credentials Quick Inject */}
+        {/* Department Access Profiles */}
         <div className="pt-4 border-t border-border/70 space-y-2 text-[11px]">
-          <p className="font-semibold text-text-secondary text-center">SIH Demo Authorized Credentials</p>
+          <p className="font-semibold text-text-secondary text-center">Authorized Department Access Profiles</p>
           <div className="grid grid-cols-2 gap-2 text-[10px]">
             <button
               type="button"

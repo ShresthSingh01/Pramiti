@@ -12,6 +12,10 @@ class ApplicationStatus(str, enum.Enum):
     AI_ANALYSIS = "ai_analysis"
     VERIFICATION = "verification"
     OFFICER_REVIEW = "officer_review"
+    APPROVED = "approved"
+    DEFICIENCY_COMMUNICATED = "deficiency_communicated"
+    EVC_INSPECTION_RECOMMENDED = "evc_inspection_recommended"
+    REJECTED = "rejected"
     COMPLETED = "completed"
 
 class VerifyStatus(str, enum.Enum):
@@ -59,6 +63,10 @@ class Application(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    decision: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    decision_remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    decision_by: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    decision_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
     institution = relationship("Institution", back_populates="applications")
     documents = relationship("Document", back_populates="application", cascade="all, delete-orphan")

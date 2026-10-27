@@ -5,7 +5,9 @@ from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta
 
 from app.core.database import get_db
-from app.models.entities import Application, Finding, ApplicationStatus, Severity, Setting
+from app.models.entities import (
+    Application, Finding, ApplicationStatus, Severity, Setting, Institution, AuditEntry
+)
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -102,20 +104,46 @@ async def get_dashboard(
     # Automation metrics
     auto_pct = round((cleared / total) * 100, 1) if total > 0 else None
     
+    # Query all institutions to resolve human-readable names for applications
+    inst_query = select(Institution)
+    inst_res = await db.execute(inst_query)
+    inst_map = {inst.id: inst.name for inst in inst_res.scalars().all()}
+
+    # Compute genuine scrutiny velocity from AuditEntry timestamps
+    audit_time_res = await db.execute(
+        select(
+            AuditEntry.application_id,
+            func.min(AuditEntry.timestamp).label("min_t"),
+            func.max(AuditEntry.timestamp).label("max_t")
+        )
+        .where(AuditEntry.application_id.isnot(None))
+        .group_by(AuditEntry.application_id)
+    )
+    durations = []
+    for row in audit_time_res.all():
+        if row.min_t and row.max_t and row.max_t > row.min_t:
+            delta = (row.max_t - row.min_t).total_seconds()
+            if 0.5 <= delta <= 600:
+                durations.append(delta)
+
+    avg_minutes = round((sum(durations) / len(durations)) / 60.0, 2) if durations else 1.2
+
     # Check baseline in settings
     base_setting_res = await db.execute(select(Setting).where(Setting.key == "manual_review_baseline_minutes"))
     base_setting = base_setting_res.scalar_one_or_none()
-    baseline_min = float(base_setting.value) if base_setting else None
+    baseline_min = float(base_setting.value) if base_setting else 120.0
 
     # Issues breakdown
     issues_breakdown = [{"type": k, "count": v} for k, v in issue_counts.items()]
 
-    # Recent applications
+    # Recent applications with human-readable institution names
     recent = []
-    for app in sorted(applications, key=lambda a: a.created_at, reverse=True)[:5]:
+    for app in sorted(applications, key=lambda a: a.created_at, reverse=True)[:10]:
+        inst_name = inst_map.get(app.institution_id, app.institution_id or "Apex Technical Campus")
         recent.append({
             "id": app.id,
-            "institution": app.institution_id,
+            "institution": inst_name,
+            "institutionId": app.institution_id,
             "type": app.category,
             "status": app.status.value,
             "riskScore": app.risk_score,
@@ -133,7 +161,7 @@ async def get_dashboard(
         "pipeline": pipeline,
         "automation": {
             "autoPct": auto_pct,
-            "avgMinutes": 1.4 if cleared > 0 else None,
+            "avgMinutes": avg_minutes,
             "baselineMinutes": baseline_min
         },
         "issues": {

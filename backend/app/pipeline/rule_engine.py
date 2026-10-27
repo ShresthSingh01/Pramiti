@@ -4,58 +4,100 @@ from typing import List, Dict, Any, Optional
 DEFAULT_RULES_YAML = """
 rules:
   - id: R-LAND-01
-    clause_ref: "AICTE Approval Process Handbook (APH) Sec 4.2"
+    clause_ref: "AICTE Approval Process Handbook (APH 2025-26), Chapter I, Section 1.4, Table 1.1 & Clause 1.4.2"
     handbook_version: "2025-26"
-    title: "Land Area Cross-Document Mismatch"
+    applicable_category: "Degree Engineering / Technical Institutions"
+    title: "Potential Anomaly: Land Area Cross-Document Mismatch"
     severity: "critical"
-    description: "Land area stated in Affidavit ({affidavit_val}) differs from Architect Floor Plan / Site Certificate ({floorplan_val}) by more than 2% tolerance."
+    statutory_rationale: "Ensures institutional campus possesses continuous and unencumbered land meeting statutory safety and instructional parcel thresholds."
+    advisory_recommendation: "Needs More Evidence"
+    description: "Land area stated in Affidavit ({affidavit_val}) differs from Architect Floor Plan / Site Certificate ({floorplan_val}) by more than statutory 2.0% tolerance."
     condition: "abs(float(affidavit.land_area) - float(floorplan.land_area)) / float(affidavit.land_area) > 0.02"
-    suggested_fix: "Rectify land parcel demarcation certificate or upload an amended affidavit consistent with the surveyor layout."
+    suggested_fix: "Furnish certified Revenue Department mutation extract and amended e-stamp affidavit reconciling exact contiguous acreage."
 
   - id: R-DATE-01
-    clause_ref: "AICTE APH Sec 3.1 & 3.4"
+    clause_ref: "AICTE Approval Process Handbook (APH 2025-26), Chapter III, Clause 3.1 & 3.4"
     handbook_version: "2025-26"
-    title: "Affiliation / NOC Expired"
+    applicable_category: "All Technical Programs (EoA Renewal)"
+    title: "Potential Anomaly: Lapsed University Affiliation / NOC"
     severity: "critical"
-    description: "The University NOC or Affiliation order expired on {expiry_date}, which is prior to the application cut-off date."
+    statutory_rationale: "Maintains active statutory affiliation with the designated State Technical University throughout the approval academic year."
+    advisory_recommendation: "Needs More Evidence"
+    description: "The University NOC or Affiliation order expired on {expiry_date}, which is prior to the regulatory academic cycle cut-off."
     condition: "is_expired(noc.expiry_date)"
     suggested_fix: "Submit provisional continuation order or renewal endorsement from the affiliating university."
 
   - id: R-INST-01
-    clause_ref: "AICTE APH Sec 2.1"
+    clause_ref: "AICTE Approval Process Handbook (APH 2025-26), Chapter II, Section 2.1 & 2.4"
     handbook_version: "2025-26"
-    title: "Institution Entity Name Discrepancy"
+    applicable_category: "All Technical Institutions"
+    title: "Potential Anomaly: Institution Legal Entity Name Discrepancy"
     severity: "high"
+    statutory_rationale: "Guarantees legal identity consistency across sponsoring Trust Deeds, land registrations, and AICTE approval records."
+    advisory_recommendation: "Needs More Evidence"
     description: "Institution name in Trust Deed / Affidavit ('{name_a}') does not match AICTE Application record ('{name_b}')."
     condition: "name_similarity(doc.name, app.name) < 0.85"
     suggested_fix: "Upload a Gazette notification or Change-of-Name resolution approved by the Competent Authority."
 
   - id: R-AREA-01
-    clause_ref: "AICTE APH Sec 4.4, Norms for Instructional Area"
+    clause_ref: "AICTE Approval Process Handbook (APH 2025-26), Chapter IV, Table 4.1 & Clause 4.4"
     handbook_version: "2025-26"
-    title: "Deficiency in Total Built-Up Instructional Area"
+    applicable_category: "Engineering & Technology (Undergraduate)"
+    title: "Potential Anomaly: Deficiency in Total Built-Up Instructional Area"
     severity: "high"
-    description: "Calculated instructional area from CAD floor plan is {built_up_area} sqm, below the minimum threshold requirement."
+    statutory_rationale: "Enforces mandatory floor-by-floor instructional, administrative, and amenities space quotas per sanctioned student intake."
+    advisory_recommendation: "Recommend Inspection"
+    description: "Calculated instructional area from CAD floor plan is {built_up_area} sqm, below statutory baseline norms."
     condition: "float(floorplan.built_up_area) < 4000.0"
-    suggested_fix: "Furnish revised master floor plans showing earmarked instructional spaces and workshop zones."
+    suggested_fix: "Furnish revised master floor plans showing earmarked instructional spaces and workshop zones meeting the 4000 sqm threshold."
 
   - id: R-ACC-01
-    clause_ref: "AICTE APH Sec 1.6 - Accreditation Requirements"
+    clause_ref: "AICTE Approval Process Handbook (APH 2025-26), Chapter VII, Clause 1.6"
     handbook_version: "2025-26"
-    title: "Accreditation Certificate Validity Review"
+    applicable_category: "Accredited Technical Programs"
+    title: "Potential Anomaly: Accreditation Validity Window Review"
     severity: "medium"
-    description: "NBA/NAAC accreditation period validity is expiring within 60 days of application."
+    statutory_rationale: "Identifies near-term accreditation expiration requiring Self-Assessment Report (SAR) resubmission."
+    advisory_recommendation: "Needs More Evidence"
+    description: "NBA/NAAC accreditation period validity is expiring within 60 days of application cut-off."
     condition: "days_until(accreditation.expiry_date) < 60"
     suggested_fix: "Provide acknowledgment of NBA/NAAC self-assessment report submission for reaccreditation."
 
   - id: R-SIGN-01
-    clause_ref: "AICTE APH Sec 2.4 - Authorized Submissions"
+    clause_ref: "AICTE Approval Process Handbook (APH 2025-26), Chapter II, Section 2.4"
     handbook_version: "2025-26"
-    title: "Undertaking Missing Authorized Signatory"
+    applicable_category: "All Statutory Filings"
+    title: "Potential Anomaly: Undertaking Missing Authorized Signatory Block"
     severity: "high"
-    description: "Mandatory affidavit lacks the signature block or stamp of the President/Secretary of the Educational Trust."
+    statutory_rationale: "Validates deponent legal authority to submit binding regulatory undertakings on behalf of the sponsoring trust."
+    advisory_recommendation: "Needs More Evidence"
+    description: "Mandatory affidavit lacks the signature block or seal of the President/Secretary of the Educational Trust."
     condition: "is_missing(affidavit.signatory)"
-    suggested_fix: "Re-upload e-notarized affidavit bearing signature and seal of designated trustee."
+    suggested_fix: "Re-upload e-notarized affidavit bearing signature, designation, and official seal of the authorized trustee."
+
+  - id: R-FSR-01
+    clause_ref: "AICTE Approval Process Handbook (APH 2025-26), Chapter VII, Table 7.1 & Appendix 7"
+    handbook_version: "2025-26"
+    applicable_category: "Undergraduate Engineering & Technology"
+    title: "Potential Anomaly: Faculty-to-Student Cadre Ratio (FSR) Deficit"
+    severity: "critical"
+    statutory_rationale: "Enforces mandatory 1:20 UG Engineering teacher-student ratio and cadre distribution (1 Professor : 2 Assoc. Prof : 6 Asst. Prof) to maintain accredited pedagogical standards."
+    advisory_recommendation: "Recommend Physical Inspection"
+    description: "Calculated Faculty-to-Student Cadre Ratio ({fsr_val}) exceeds the mandatory statutory threshold of 1:20."
+    condition: "fsr_ratio > 20.0"
+    suggested_fix: "Appoint required Professor and Associate Professor cadres through University-approved selection committees to restore the statutory 1:20 ratio."
+
+  - id: R-FIRE-01
+    clause_ref: "AICTE Approval Process Handbook (APH 2025-26), Chapter II, Section 2.5 & Appendix 16"
+    handbook_version: "2025-26"
+    applicable_category: "All Educational Campuses"
+    title: "Potential Anomaly: National Building Code (NBC) Fire Safety Clearance"
+    severity: "high"
+    statutory_rationale: "Validates active structural and occupant fire-safety compliance certified by the Competent Municipal / State Fire Services Authority."
+    advisory_recommendation: "Needs More Evidence"
+    description: "Campus building height or laboratory zone requires a valid standing Fire Safety NOC pursuant to NBC Part IV."
+    condition: "is_expired(building.fire_noc)"
+    suggested_fix: "Furnish current Fire & Life Safety Certificate issued by State Fire Services Directorate."
 """
 
 def evaluate_rules_on_facts(facts: List[Dict[str, Any]], app_metadata: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -300,6 +342,79 @@ def evaluate_rules_on_facts(facts: List[Dict[str, Any]], app_metadata: Dict[str,
                 },
                 "suggested_fix": "Upload a Gazette notification or Change-of-Name resolution approved by the Competent Authority."
             })
+
+    # 7. Evaluate R-FSR-01: Faculty-to-Student Cadre Ratio Deficit
+    fsr_facts = [f for f in facts if f.get("field") == "faculty_cadre_ratio"]
+    for ff in fsr_facts:
+        val = str(ff.get("value", "")).strip()
+        try:
+            parts = val.split(":")
+            ratio_num = float(parts[-1]) if len(parts) > 1 else float(val)
+            if ratio_num > 20.0:
+                findings.append({
+                    "id": "FND-FSR-01",
+                    "rule_id": "R-FSR-01",
+                    "clause_ref": "AICTE Approval Process Handbook (APH 2025-26), Chapter VII, Table 7.1",
+                    "handbook_version": "2025-26",
+                    "title": "Faculty-to-Student Cadre Ratio (FSR) Deficit",
+                    "severity": "critical",
+                    "description": f"Calculated Faculty-to-Student Cadre Ratio is {val}, failing the mandatory statutory threshold of <= 1:20 (Cadre deficit detected).",
+                    "tags": ["R-FSR-01", "APH Chap VII", "Academic"],
+                    "confidence": 0.98,
+                    "evidence": {
+                        "page": ff.get("page", 1),
+                        "phrase": f"Cadre Ratio: {val}",
+                        "line_ref": "Faculty Cadre Compliance Summary Section",
+                        "primary_doc": "Certified Faculty Profile List",
+                        "bbox": ff.get("bbox", [0.65, 0.1, 0.72, 0.85])
+                    },
+                    "analysis": {
+                        "type": "Statutory Cadre Deficit",
+                        "confidence": 0.98,
+                        "method": "Faculty Cadre Register evaluation against AICTE Table 7.1 norms",
+                        "explanation": f"Reported FSR of {val} violates the mandatory ceiling of 1:20 for undergraduate technical institutions.",
+                        "why_happened": "Cadre register contains insufficient approved Professors and Associate Professors to satisfy mandatory student intake quotas.",
+                        "sources": [{"doc": "Certified Faculty Profile List", "phrase": f"Cadre Ratio: {val}", "page": 1, "field": "faculty_cadre_ratio"}]
+                    },
+                    "suggested_fix": "Appoint required Professor and Associate Professor cadres through University-approved selection committees to restore the statutory 1:20 ratio."
+                })
+                break
+        except Exception:
+            pass
+
+    # 8. Evaluate R-FIRE-01: National Building Code Fire Safety Clearance
+    fire_facts = [f for f in facts if f.get("field") == "fire_safety_noc"]
+    for ff in fire_facts:
+        val = str(ff.get("value", "")).strip().lower()
+        if "expired" in val or "lapsed" in val or "missing" in val:
+            findings.append({
+                "id": "FND-FIRE-01",
+                "rule_id": "R-FIRE-01",
+                "clause_ref": "AICTE Approval Process Handbook (APH 2025-26), Chapter II, Section 2.5",
+                "handbook_version": "2025-26",
+                "title": "National Building Code (NBC) Fire Safety Clearance Expired",
+                "severity": "high",
+                "description": f"Mandatory Fire Safety Certificate status is '{ff.get('value')}'. Valid clearance is mandatory for campus occupancy.",
+                "tags": ["R-FIRE-01", "APH Chap II", "Safety"],
+                "confidence": 0.96,
+                "evidence": {
+                    "page": ff.get("page", 1),
+                    "phrase": f"Fire Safety: {ff.get('value')}",
+                    "line_ref": "Campus Safety Compliance Section",
+                    "primary_doc": "Architectural Floor Plan",
+                    "bbox": ff.get("bbox", [0.82, 0.1, 0.90, 0.85])
+                },
+                "analysis": {
+                    "type": "Safety Clearance Non-Compliance",
+                    "confidence": 0.96,
+                    "method": "NBC 2016 Part IV Fire and Life Safety Norms",
+                    "explanation": "Active Fire Safety NOC is a mandatory prerequisite for technical campus approval.",
+                    "why_happened": "Clearance certificate lapsed prior to the current academic approval cut-off.",
+                    "sources": [{"doc": "Architectural Floor Plan", "phrase": str(ff.get("value")), "page": 1, "field": "fire_safety_noc"}]
+                },
+                "suggested_fix": "Furnish current Fire & Life Safety Certificate issued by State Fire Services Directorate."
+            })
+            break
 
     # Enrich findings with PageIndex Regulatory Handbook citations if available
     try:

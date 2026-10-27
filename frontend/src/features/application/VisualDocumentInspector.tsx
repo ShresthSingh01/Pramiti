@@ -10,7 +10,6 @@ import {
   FileText, 
   ChevronLeft, 
   ChevronRight, 
-  Sparkles,
   Info,
   Layers,
   ArrowRight
@@ -32,6 +31,8 @@ export interface DocumentMarker {
   cross_phrase?: string;
   remediation?: string;
   confidence?: number;
+  bbox_is_estimated?: boolean;
+  grounding_method?: string;
 }
 
 interface MarkersResponse {
@@ -362,6 +363,8 @@ export const VisualDocumentInspector: React.FC<VisualDocumentInspectorProps> = (
                     const heightPct = Math.max(2.2, Math.min(100 - topPct, (ymax - ymin) * 100));
                     const widthPct = Math.max(4.0, Math.min(100 - leftPct, (xmax - xmin) * 100));
 
+                    const isEst = !!m.bbox_is_estimated;
+
                     return (
                       <div
                         key={m.id}
@@ -373,6 +376,8 @@ export const VisualDocumentInspector: React.FC<VisualDocumentInspectorProps> = (
                           height: `${heightPct}%`,
                         }}
                         className={`absolute cursor-pointer transition-all duration-200 z-10 group ${
+                          isEst ? 'border-dashed' : 'border-solid'
+                        } ${
                           m.is_error
                             ? isSelected
                               ? 'border-2 border-red-600 bg-red-500/35 ring-4 ring-amber-400/80 shadow-lg'
@@ -392,6 +397,11 @@ export const VisualDocumentInspector: React.FC<VisualDocumentInspectorProps> = (
                           <span>{m.is_error ? '⚠️' : '✓'}</span>
                           <span className="font-mono">{m.rule_id || m.title}:</span>
                           <span className="underline decoration-white/70 font-semibold">{m.phrase || 'Flagged'}</span>
+                          {isEst && (
+                            <span className="px-1 py-0.2 bg-amber-500 text-white rounded text-[8px] font-mono ml-0.5">
+                              INFERRED
+                            </span>
+                          )}
                         </div>
                       </div>
                     );
@@ -410,11 +420,20 @@ export const VisualDocumentInspector: React.FC<VisualDocumentInspectorProps> = (
                     {selectedMarker.is_error ? <AlertTriangle size={15} /> : <CheckCircle size={15} />}
                   </div>
                   <div className="space-y-0.5 min-w-0">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="font-bold text-text-primary text-xs">{selectedMarker.title}</span>
                       {selectedMarker.clause_ref && (
-                        <span className="text-[10px] font-bold text-primary bg-primary-soft px-1.5 py-0.2 rounded">
+                        <span className="text-[10px] font-bold text-primary bg-primary-soft px-1.5 py-0.2 rounded border border-primary/20">
                           {selectedMarker.clause_ref}
+                        </span>
+                      )}
+                      {selectedMarker.bbox_is_estimated ? (
+                        <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300">
+                          ⚡ Regional Scope (Semantic Heuristic)
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-300">
+                          ✓ Exact Grounded Coordinates (PyMuPDF Vector Match)
                         </span>
                       )}
                     </div>

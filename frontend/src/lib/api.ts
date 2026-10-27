@@ -66,6 +66,11 @@ export interface ApplicationDetail {
     required: boolean;
     fileUrl?: string;
   }[];
+  decision?: string | null;
+  decisionRemarks?: string | null;
+  decisionBy?: string | null;
+  decisionAt?: string | null;
+  version?: number;
 }
 
 export interface Finding {

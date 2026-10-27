@@ -1,0 +1,14 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.git
+.github
+.vscode
+.idea
+backend/venv
+frontend/node_modules
+frontend/dist
+backend/storage/documents/*
+!backend/storage/documents/.gitkeep
+.env

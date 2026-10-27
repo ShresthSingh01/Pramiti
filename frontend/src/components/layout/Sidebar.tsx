@@ -8,12 +8,11 @@ import {
   BadgeCheck, 
   Bell, 
   Settings,
-  Sparkles
+  Plus
 } from 'lucide-react';
 
 interface SidebarProps {
   onOpenSyntheticModal: () => void;
-  hasSynthetic: boolean;
 }
 
 const navItems = [
@@ -90,14 +89,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSyntheticModal }) => {
         </nav>
       </div>
 
-      {/* Ingestion Studio CTA & Organization footer */}
+      {/* Registration Action & Organization footer */}
       <div className="p-4 border-t border-white/10 space-y-3">
         <button
           onClick={onOpenSyntheticModal}
-          className="w-full flex items-center justify-center space-x-2 py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-lg shadow-blue-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+          className="w-full flex items-center justify-center space-x-2 py-2 px-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-medium border border-white/10 transition-colors"
         >
-          <Sparkles size={14} className="text-warning animate-pulse" />
-          <span>Ingestion Studio</span>
+          <Plus size={14} className="text-blue-400" />
+          <span>Register Application</span>
         </button>
 
         <div className="pt-2 text-[10px] text-text-muted border-t border-white/5 leading-snug">

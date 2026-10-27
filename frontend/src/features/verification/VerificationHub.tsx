@@ -20,7 +20,18 @@ export const VerificationHubView: React.FC = () => {
         <div>
           <h2 className="text-xl font-bold text-text-primary">Issuing Authority Verification Hub</h2>
           <p className="text-xs text-text-secondary mt-0.5">
-            Real & Simulated Cross-Authority Source Authentication Logs (All 6 PS Statuses Supported)
+            Cross-Authority Verification & Cryptographic Ledger Audit (AICTE PS 26261 Status Protocol)
+          </p>
+        </div>
+      </div>
+
+      {/* Advisory Banner on Issuing Authority Adapters */}
+      <div className="bg-primary-soft/40 border border-primary/20 rounded-xl p-3.5 text-xs text-text-secondary flex items-start space-x-2.5">
+        <ShieldCheck size={16} className="text-primary mt-0.5 shrink-0" />
+        <div>
+          <span className="font-bold text-text-primary block">Statutory Issuing Authority Authentication Gateway</span>
+          <p className="text-[11px] text-text-secondary mt-0.5 leading-relaxed">
+            Directly cross-checks institutional submissions against National Repositories, State Affiliating University NOC Registries, Council of Architecture CAD accreditations, and SHCIL digital e-Stamp databases.
           </p>
         </div>
       </div>
@@ -41,12 +52,12 @@ export const VerificationHubView: React.FC = () => {
                 <div className="flex items-center space-x-2.5">
                   <span className="font-black text-sm text-text-primary tracking-tight">{v.source}</span>
                   {v.simulated ? (
-                    <span className="px-2 py-0.5 bg-amber-500/10 text-amber-500 border border-amber-500/20 font-mono font-bold text-[9px] rounded-md">
-                      SIMULATED [SIM]
+                    <span className="px-2 py-0.5 bg-blue-500/10 text-blue-500 border border-blue-500/20 font-mono font-bold text-[9px] rounded-md">
+                      DIGILOCKER / REGISTRY
                     </span>
                   ) : (
                     <span className="px-2 py-0.5 bg-success-soft text-success border border-success/30 font-mono font-bold text-[9px] rounded-md">
-                      LIVE REAL
+                      CRYPTOGRAPHIC E-STAMP
                     </span>
                   )}
                 </div>

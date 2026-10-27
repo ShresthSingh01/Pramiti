@@ -40,38 +40,41 @@ def _analyze_pdf(file_path: str) -> List[Dict[str, Any]]:
         for sp in suspicious:
             if sp in producer or sp in creator:
                 indicators.append({
-                    "type": "suspicious_pdf_producer",
+                    "type": "potential_anomaly_pdf_producer",
                     "severity": "high",
                     "confidence": 0.88,
-                    "title": "Suspicious Document Authoring Software",
-                    "detail": f"Document metadata indicates editing via graphics software ({meta.get('producer') or meta.get('creator')}). Official state or notary records are issued by certified document/scanning pipelines.",
+                    "title": "Potential Anomaly: Consumer Graphics Authoring Tool Detected",
+                    "detail": f"Document metadata indicates editing via graphics software ({meta.get('producer') or meta.get('creator')}). Official state or notary records are issued by certified scanning pipelines. Preliminary observational indicator requiring human verification, not conclusive proof of fraud.",
                     "method": "PDF metadata producer/creator inspection",
-                    "is_indicator_only": True
+                    "is_indicator_only": True,
+                    "advisory_recommendation": "Needs More Evidence"
                 })
                 break
 
         # 2. ModDate vs CreationDate mismatch (digital re-touch)
         if mod_date and creation_date and mod_date[:10] != creation_date[:10]:
             indicators.append({
-                "type": "pdf_modified_after_creation",
+                "type": "potential_anomaly_modified_date",
                 "severity": "medium",
                 "confidence": 0.82,
-                "title": "Document Re-saved / Altered Post-Issuance",
-                "detail": f"Document modified on {mod_date[:10]} subsequent to original execution ({creation_date[:10]}).",
+                "title": "Potential Anomaly: Document Re-saved Post-Issuance",
+                "detail": f"Document modified on {mod_date[:10]} subsequent to original execution ({creation_date[:10]}). Preliminary observational indicator requiring human verification, not conclusive proof of fraud.",
                 "method": "PDF metadata lifecycle discrepancy",
-                "is_indicator_only": True
+                "is_indicator_only": True,
+                "advisory_recommendation": "Needs More Evidence"
             })
 
         # 3. Missing/stripped metadata
         if not meta.get("producer") and not meta.get("creator"):
             indicators.append({
-                "type": "missing_pdf_metadata",
+                "type": "potential_anomaly_missing_metadata",
                 "severity": "low",
                 "confidence": 0.70,
-                "title": "Stripped Document Metadata Header",
-                "detail": "Producer and creator metadata attributes are unpopulated.",
+                "title": "Potential Anomaly: Stripped Document Metadata Header",
+                "detail": "Producer and creator metadata attributes are unpopulated. Preliminary observational indicator requiring human verification.",
                 "method": "PDF metadata completeness audit",
-                "is_indicator_only": True
+                "is_indicator_only": True,
+                "advisory_recommendation": "Needs More Evidence"
             })
 
         # 4. Render Page 1 to Image for ELA & QR analysis
@@ -84,13 +87,14 @@ def _analyze_pdf(file_path: str) -> List[Dict[str, Any]]:
             ela_score = _ela_from_pil(img)
             if ela_score > 28.0:
                 indicators.append({
-                    "type": "ela_tamper_detected",
+                    "type": "potential_anomaly_ela_compression",
                     "severity": "high",
                     "confidence": round(min(ela_score / 100.0, 0.94), 2),
-                    "title": "Suspected Digital Manipulation (ELA)",
-                    "detail": f"Error Level Analysis on page 1 detected compression anomaly (delta score: {ela_score:.1f}). Possible copy-pasted seal, stamp, or digital text alteration.",
+                    "title": "Potential Anomaly: Raster Compression Inconsistency (ELA)",
+                    "detail": f"Error Level Analysis on page 1 detected compression anomaly (delta score: {ela_score:.1f}). Possible copy-pasted seal, stamp, or digital text alteration. Preliminary observational indicator requiring human verification, not conclusive proof of fraud.",
                     "method": "ELA on rendered PDF raster (100 DPI)",
-                    "is_indicator_only": True
+                    "is_indicator_only": True,
+                    "advisory_recommendation": "Recommend Inspection"
                 })
 
             # Real QR / Barcode detection
@@ -131,13 +135,14 @@ def _analyze_image(file_path: str) -> List[Dict[str, Any]]:
         ela_score = _ela_from_pil(img)
         if ela_score > 30.0:
             indicators.append({
-                "type": "ela_tamper_detected",
+                "type": "potential_anomaly_ela_compression",
                 "severity": "high",
                 "confidence": round(min(ela_score / 100.0, 0.95), 2),
-                "title": "Suspected Digital Manipulation (ELA)",
-                "detail": f"Error Level Analysis detected compression rate discrepancy (score: {ela_score:.1f}). Possible copy-pasted seal, stamp, or digital alteration.",
+                "title": "Potential Anomaly: Raster Compression Inconsistency (ELA)",
+                "detail": f"Error Level Analysis detected compression rate discrepancy (score: {ela_score:.1f}). Possible copy-pasted seal, stamp, or digital alteration. Preliminary observational indicator requiring human verification, not conclusive proof of fraud.",
                 "method": "Error Level Analysis (JPEG re-compression delta)",
-                "is_indicator_only": True
+                "is_indicator_only": True,
+                "advisory_recommendation": "Recommend Inspection"
             })
 
         dhash_val = _calculate_dhash(img)

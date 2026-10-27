@@ -1,4 +1,4 @@
-# EvidenceGraph: Frontend Build Specification v2 (Data-Driven, Zero Prefill)
+# PRAMITI: Frontend Build Specification v2 (Data-Driven, Zero Prefill)
 
 > **Supersedes `UI_SPEC.md`.** The reference image defines **layout, structure, styling and component behavior only**. **Nothing in the image is data.** Names, numbers, dates, percentages, rule numbers, file names and findings seen in the image must **never** appear in code, seeds, fixtures or copy.
 >

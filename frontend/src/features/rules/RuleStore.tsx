@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Search, Sparkles, CheckCircle2, ChevronRight, Layers, Cpu } from 'lucide-react';
+import { BookOpen, Search, CheckCircle2, ChevronRight, Layers, Cpu } from 'lucide-react';
 import api from '../../lib/api';
 
 interface RuleItem {
@@ -186,7 +186,7 @@ export const RuleStoreView: React.FC = () => {
               disabled={querying || !query.trim()}
               className="px-5 py-2.5 bg-primary text-white rounded-lg text-xs font-semibold hover:bg-primary-hover disabled:opacity-50 transition flex items-center space-x-1.5"
             >
-              <Sparkles size={14} />
+              <Search size={14} />
               <span>{querying ? 'Searching Tree...' : 'Verify Clause'}</span>
             </button>
           </form>

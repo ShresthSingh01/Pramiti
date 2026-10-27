@@ -8,6 +8,7 @@ import { Theme, getInitialTheme, applyTheme } from './lib/theme';
 
 // Lazy-loaded route views for lightning-fast initial load & code splitting
 const Dashboard = lazy(() => import('./features/dashboard/Dashboard').then(m => ({ default: m.Dashboard })));
+const ApplicationListView = lazy(() => import('./features/application/ApplicationList').then(m => ({ default: m.ApplicationListView })));
 const ApplicationDetailView = lazy(() => import('./features/application/ApplicationDetail').then(m => ({ default: m.ApplicationDetailView })));
 const RuleStoreView = lazy(() => import('./features/rules/RuleStore').then(m => ({ default: m.RuleStoreView })));
 const VerificationHubView = lazy(() => import('./features/verification/VerificationHub').then(m => ({ default: m.VerificationHubView })));
@@ -94,13 +95,10 @@ export function App() {
       <div className="flex min-h-screen bg-app text-text-primary transition-colors duration-200">
         <Sidebar 
           onOpenSyntheticModal={() => setIsSyntheticModalOpen(true)}
-          hasSynthetic={hasSynthetic}
         />
         <div className="flex-1 flex flex-col min-w-0">
           <Topbar 
             hasUnreadAlerts={hasUnreadAlerts}
-            hasSynthetic={hasSynthetic}
-            onPurgeSynthetic={handlePurge}
             theme={theme}
             onToggleTheme={toggleTheme}
           />
@@ -108,8 +106,8 @@ export function App() {
             <Suspense fallback={<RouteFallback />}>
               <Routes>
                 <Route path="/" element={<Dashboard onOpenNewAppModal={() => setIsSyntheticModalOpen(true)} />} />
+                <Route path="/applications" element={<ApplicationListView onOpenNewAppModal={() => setIsSyntheticModalOpen(true)} />} />
                 <Route path="/applications/:id" element={<ApplicationDetailView />} />
-                <Route path="/applications" element={<Dashboard onOpenNewAppModal={() => setIsSyntheticModalOpen(true)} />} />
                 <Route path="/rules" element={<RuleStoreView />} />
                 <Route path="/verification" element={<VerificationHubView />} />
                 <Route path="/alerts" element={<AlertListView />} />

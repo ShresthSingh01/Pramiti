@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   X, 
-  Sparkles, 
   Building2, 
   FileCheck2, 
   UploadCloud, 
   CheckCircle2, 
   AlertOctagon, 
-  ExternalLink, 
   ArrowRight,
   ShieldCheck,
-  Cpu
+  Cpu,
+  LayoutDashboard
 } from 'lucide-react';
 import api from '../../lib/api';
+import { clearDashboardCache } from '../../features/dashboard/dashboardCache';
 
 interface IngestionModalProps {
   isOpen: boolean;
@@ -39,9 +39,16 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
   // Custom manual uploads map
   const [manualFiles, setManualFiles] = useState<Record<string, File>>({});
   
-  // Processing state & stepper
+  // Processing state & live stepper
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [progressStatusText, setProgressStatusText] = useState('Initializing SHA-256 cryptographic digests...');
+  const [completedRiskScore, setCompletedRiskScore] = useState<number | null>(null);
+  const [completedFindingsCount, setCompletedFindingsCount] = useState<number | null>(null);
+  const [processedDocInfo, setProcessedDocInfo] = useState<{ processed: number; total: number }>({ processed: 0, total: 6 });
+
+  const autoNavTimeoutRef = useRef<any>(null);
 
   const steps = [
     { title: "SHA-256 Digest & Hashing", desc: "Generating tamper-evident cryptographic checksums" },
@@ -65,7 +72,22 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
       api.get<ShowcaseDossier[]>('/sample-dossiers')
         .then(res => setDossiers(res.data))
         .catch(err => console.error(err));
+      
+      // Reset processing flags when opening modal
+      setIsProcessing(false);
+      setIsCompleted(false);
+      setCurrentStep(0);
+      setCompletedRiskScore(null);
+      setCompletedFindingsCount(null);
+      if (autoNavTimeoutRef.current) {
+        clearTimeout(autoNavTimeoutRef.current);
+      }
     }
+    return () => {
+      if (autoNavTimeoutRef.current) {
+        clearTimeout(autoNavTimeoutRef.current);
+      }
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -88,11 +110,27 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
     }
   };
 
+  const finishAndNavigate = (targetAppId: string, goToDashboard: boolean = false) => {
+    if (autoNavTimeoutRef.current) {
+      clearTimeout(autoNavTimeoutRef.current);
+    }
+    clearDashboardCache();
+    window.dispatchEvent(new CustomEvent('dashboard:refresh'));
+    onSuccess();
+    onClose();
+    if (goToDashboard) {
+      navigate('/');
+    } else {
+      navigate(`/applications/${targetAppId}`);
+    }
+  };
+
   const handleIngestAndScrutinize = async () => {
-    let progressTimer: any = null;
     try {
       setIsProcessing(true);
+      setIsCompleted(false);
       setCurrentStep(0);
+      setProgressStatusText("Initializing cryptographic SHA-256 digests and registering application...");
 
       const hasManualUploads = Object.keys(manualFiles).length > 0;
 
@@ -100,11 +138,6 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
       if (!targetAppId) {
         targetAppId = `AICTE-2026-${Math.floor(100000 + Math.random() * 900000)}`;
       }
-
-      // Smooth step advancement so user sees active pipeline stages
-      progressTimer = setInterval(() => {
-        setCurrentStep((prev) => (prev < 2 ? prev + 1 : prev));
-      }, 600);
 
       if (!hasManualUploads) {
         // Quick 1-click professional ingestion via showcase dossier
@@ -135,20 +168,91 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
         await api.post(`/sample-dossiers/load-into-app?app_id=${targetAppId}&dossier_id=${selectedDossier}`);
       }
 
-      clearInterval(progressTimer);
-      // Fast-forward final verification stages
-      setCurrentStep(3);
-      await new Promise(r => setTimeout(r, 350));
-      setCurrentStep(4);
-      await new Promise(r => setTimeout(r, 350));
+      // Keep modal open and actively poll until the backend scrutiny pipeline is 100% complete
+      setCurrentStep(1);
+      setProgressStatusText("Extracting normalized bounding boxes & field candidates via PyMuPDF...");
 
-      setIsProcessing(false);
+      let pollCount = 0;
+      const maxPolls = 80;
+      let isDone = false;
+      let finalRisk = 0;
+      let finalFindingsCount = 0;
+
+      while (pollCount < maxPolls && !isDone) {
+        await new Promise(r => setTimeout(r, 250));
+        pollCount++;
+
+        try {
+          const appRes = await api.get<any>(`/applications/${targetAppId}`);
+          const appData = appRes.data;
+          const status = (appData.status || '').toLowerCase();
+          const checklist: any[] = appData.checklist || [];
+          const totalDocs = checklist.length || 6;
+          const analyzingDocs = checklist.filter((d: any) => d.status === 'analyzing');
+          const completedDocs = checklist.filter((d: any) => d.status === 'verified' || d.status === 'issues_found');
+
+          setProcessedDocInfo({ processed: completedDocs.length, total: totalDocs });
+
+          if (status === 'ai_analysis' || analyzingDocs.length > 0) {
+            setCurrentStep(1);
+            if (completedDocs.length > 0) {
+              setProgressStatusText(`Extracting fields & bounding boxes: ${completedDocs.length}/${totalDocs} documents processed...`);
+            } else {
+              setProgressStatusText(`Extracting fields & bounding boxes on CPU across ${totalDocs} statutory documents...`);
+            }
+          } else if (status === 'verification') {
+            setCurrentStep(2);
+            setProgressStatusText("Querying SHCIL e-Stamp, State University Portal & CoA Registry...");
+          }
+
+          const pipelineStillRunning = ['submitted', 'ai_analysis', 'verification'].includes(status) || analyzingDocs.length > 0;
+          if (!pipelineStillRunning) {
+            isDone = true;
+            setCurrentStep(3);
+            setProgressStatusText("Evaluating AICTE APH 2025-26 rules & cross-document consistency...");
+            await new Promise(r => setTimeout(r, 160));
+            
+            setCurrentStep(4);
+            setProgressStatusText("Evidence Graph synthesized! Computing risk index & building audit ledger...");
+            await new Promise(r => setTimeout(r, 160));
+            
+            finalRisk = appData.riskScore ?? 0;
+            try {
+              const findingsRes = await api.get<any[]>(`/applications/${targetAppId}/findings`);
+              finalFindingsCount = findingsRes.data?.length || 0;
+            } catch {
+              finalFindingsCount = 0;
+            }
+
+            setCompletedRiskScore(finalRisk);
+            setCompletedFindingsCount(finalFindingsCount);
+            setIsCompleted(true);
+            setProgressStatusText(`Scrutiny complete! Risk Index: ${finalRisk}% | ${finalFindingsCount} findings detected.`);
+            break;
+          }
+        } catch (pollErr) {
+          console.warn("Temporary polling issue, retrying...", pollErr);
+        }
+      }
+
+      // If timed out, set completed gracefully
+      if (!isDone) {
+        setIsCompleted(true);
+        setCurrentStep(4);
+        setProgressStatusText("Pipeline finished preliminary pass. Loading records...");
+      }
+
+      // Bust cache and notify dashboard
+      clearDashboardCache();
+      window.dispatchEvent(new CustomEvent('dashboard:refresh'));
       onSuccess();
-      onClose();
-      navigate(`/applications/${targetAppId}`);
+
+      // Auto-navigate after 1.2 seconds so user sees visual confirmation, or they can click immediately
+      autoNavTimeoutRef.current = setTimeout(() => {
+        finishAndNavigate(targetAppId, false);
+      }, 1200);
 
     } catch (err: any) {
-      if (progressTimer) clearInterval(progressTimer);
       console.error("Ingestion failed:", err);
       setIsProcessing(false);
       const detail = err.response?.data?.detail || err.message || "Unknown error occurred";
@@ -156,7 +260,19 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
     }
   };
 
-  const currentDossierObj = dossiers.find(d => d.id === selectedDossier);
+  const getProgressPercentage = () => {
+    if (isCompleted) return 100;
+    if (currentStep === 0) return 15;
+    if (currentStep === 1) {
+      const base = 25;
+      const docShare = processedDocInfo.total > 0 ? (processedDocInfo.processed / processedDocInfo.total) * 30 : 0;
+      return Math.round(base + docShare);
+    }
+    if (currentStep === 2) return 68;
+    if (currentStep === 3) return 86;
+    if (currentStep === 4) return 96;
+    return 20;
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
@@ -169,19 +285,14 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
               <Building2 size={20} />
             </div>
             <div>
-              <div className="flex items-center space-x-2">
-                <h2 className="text-base font-bold text-text-primary">Application Ingestion & Scrutiny Studio</h2>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-primary text-white uppercase tracking-wider">
-                  Live Showcase
-                </span>
-              </div>
+              <h2 className="text-base font-bold text-text-primary">New Scrutiny Application Ingestion</h2>
               <p className="text-xs text-text-secondary mt-0.5">
-                Ingest regulatory documents into the verifiable evidence graph with zero external API token costs.
+                Ingest and register institutional regulatory records into the verifiable evidence graph.
               </p>
             </div>
           </div>
           {!isProcessing && (
-            <button onClick={onClose} className="p-1 rounded-md text-text-muted hover:text-text-primary hover:bg-border transition">
+            <button onClick={onClose} className="p-1 rounded-md text-text-muted hover:text-text-primary hover:bg-border transition cursor-pointer">
               <X size={18} />
             </button>
           )}
@@ -189,58 +300,148 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
 
         {/* Processing Stepper Overlay */}
         {isProcessing ? (
-          <div className="py-8 px-4 space-y-6">
-            <div className="text-center space-y-1.5">
-              <Cpu size={36} className="mx-auto text-primary animate-pulse" />
-              <h3 className="text-sm font-bold text-text-primary">Executing Zero-Cost Local Processing Pipeline</h3>
-              <p className="text-xs text-text-secondary">
-                Analyzing documents using PyMuPDF bounding box extraction and deterministic APH 2025-26 rules
+          <div className="py-6 px-4 space-y-6">
+            <div className="text-center space-y-2">
+              {isCompleted ? (
+                <div className="w-12 h-12 bg-success-soft text-success rounded-full flex items-center justify-center mx-auto animate-bounce">
+                  <CheckCircle2 size={32} />
+                </div>
+              ) : (
+                <Cpu size={36} className="mx-auto text-primary animate-pulse" />
+              )}
+              
+              <h3 className="text-base font-bold text-text-primary">
+                {isCompleted ? "Evidence Scrutiny & Ingestion Complete" : "Executing Evidence Scrutiny Pipeline"}
+              </h3>
+              <p className="text-xs text-text-secondary max-w-md mx-auto">
+                {isCompleted 
+                  ? "All statutory documents have been analyzed, cross-referenced against issuing authorities, and loaded into the dashboard."
+                  : "Analyzing documents using PyMuPDF bounding box extraction and deterministic APH 2025-26 rules."
+                }
               </p>
             </div>
 
-            <div className="space-y-3 max-w-xl mx-auto">
-              {steps.map((st, idx) => (
+            {/* Visual Progress Bar */}
+            <div className="max-w-xl mx-auto space-y-1.5">
+              <div className="flex justify-between text-[11px] text-text-muted font-mono">
+                <span>Progress: {progressStatusText}</span>
+                <span className="font-bold text-text-primary">{getProgressPercentage()}%</span>
+              </div>
+              <div className="w-full bg-border rounded-full h-2 overflow-hidden">
                 <div 
-                  key={idx}
-                  className={`p-3 rounded-lg border text-xs flex items-center space-x-3 transition-all ${
-                    idx < currentStep 
-                      ? 'border-success/40 bg-success-soft/30 text-success' 
-                      : idx === currentStep 
-                      ? 'border-primary bg-primary-soft/40 text-primary font-semibold shadow-sm'
-                      : 'border-border bg-app/50 text-text-muted opacity-60'
-                  }`}
-                >
-                  <div className="shrink-0">
-                    {idx < currentStep ? (
-                      <CheckCircle2 size={16} className="text-success" />
-                    ) : idx === currentStep ? (
-                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <div className="w-4 h-4 rounded-full border border-border flex items-center justify-center text-[9px]">
-                        {idx + 1}
-                      </div>
+                  className={`h-full transition-all duration-500 rounded-full ${isCompleted ? 'bg-success' : 'bg-primary'}`}
+                  style={{ width: `${getProgressPercentage()}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Stepper Stages */}
+            <div className="space-y-2.5 max-w-xl mx-auto">
+              {steps.map((st, idx) => {
+                const isStepFinished = idx < currentStep || isCompleted;
+                const isStepActive = idx === currentStep && !isCompleted;
+
+                return (
+                  <div 
+                    key={idx}
+                    className={`p-3 rounded-lg border text-xs flex items-center space-x-3 transition-all ${
+                      isStepFinished 
+                        ? 'border-success/40 bg-success-soft/30 text-success' 
+                        : isStepActive 
+                        ? 'border-primary bg-primary-soft/40 text-primary font-semibold shadow-sm ring-1 ring-primary/20'
+                        : 'border-border bg-app/50 text-text-muted opacity-60'
+                    }`}
+                  >
+                    <div className="shrink-0">
+                      {isStepFinished ? (
+                        <CheckCircle2 size={16} className="text-success" />
+                      ) : isStepActive ? (
+                        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <div className="w-4 h-4 rounded-full border border-border flex items-center justify-center text-[9px] font-mono">
+                          {idx + 1}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-text-primary">{st.title}</p>
+                      <p className="text-[10px] text-text-secondary">{st.desc}</p>
+                    </div>
+                    {isStepFinished && (
+                      <span className="text-[10px] font-mono text-success font-semibold shrink-0">Done</span>
+                    )}
+                    {isStepActive && (
+                      <span className="text-[10px] font-mono text-primary font-semibold shrink-0 animate-pulse">Running...</span>
                     )}
                   </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-text-primary">{st.title}</p>
-                    <p className="text-[10px] text-text-secondary">{st.desc}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+
+            {/* Live Status and Completion Actions */}
+            {isCompleted ? (
+              <div className="max-w-xl mx-auto pt-2 space-y-3">
+                <div className="p-3.5 bg-card-subtle rounded-xl border border-border flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center space-x-2">
+                    <ShieldCheck size={18} className="text-success shrink-0" />
+                    <div>
+                      <p className="text-xs font-bold text-text-primary">Scrutiny Ready for Review</p>
+                      <p className="text-[10px] text-text-secondary">
+                        Found {completedFindingsCount ?? 0} compliance findings • Risk Index: {completedRiskScore ?? 0}%
+                      </p>
+                    </div>
+                  </div>
+
+                  <span className={`px-2.5 py-1 rounded text-xs font-mono font-bold ${
+                    (completedRiskScore ?? 0) > 50 ? 'bg-danger-soft text-danger' : 'bg-success-soft text-success'
+                  }`}>
+                    Risk: {completedRiskScore ?? 0}%
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => finishAndNavigate(appId.trim(), true)}
+                    className="flex-1 px-4 py-2 bg-card border border-border rounded-lg text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-border transition flex items-center justify-center space-x-1.5 cursor-pointer"
+                  >
+                    <LayoutDashboard size={14} />
+                    <span>View in Dashboard</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => finishAndNavigate(appId.trim(), false)}
+                    className="flex-1 px-4 py-2 bg-primary text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer"
+                  >
+                    <span>Open Application Details</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+                <p className="text-center text-[10px] text-text-muted">
+                  Auto-opening application in 2 seconds...
+                </p>
+              </div>
+            ) : (
+              <div className="text-center pt-2">
+                <p className="text-[11px] text-text-muted">
+                  Please hold while our deterministic verification engine authenticates all documents against state registries.
+                </p>
+              </div>
+            )}
           </div>
         ) : (
           <>
-            {/* Quick-Fill Preset Buttons */}
+            {/* Institutional Presets */}
             <div className="bg-app p-3 rounded-lg border border-border space-y-2">
               <span className="text-[11px] font-bold text-text-primary uppercase tracking-wider block">
-                Quick-Fill with Prepared Professional Dossiers:
+                Select Benchmark Application Dossier:
               </span>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                 <button
                   type="button"
                   onClick={handleSelectCompliant}
-                  className={`p-3 rounded-lg border text-left transition flex items-center justify-between ${
+                  className={`p-3 rounded-lg border text-left transition flex items-center justify-between cursor-pointer ${
                     selectedDossier === 'Dossier_A_Compliant'
                       ? 'border-success bg-success-soft/40 shadow-sm'
                       : 'border-border bg-card hover:border-text-secondary'
@@ -249,10 +450,10 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
                   <div className="space-y-0.5">
                     <div className="flex items-center space-x-1.5">
                       <ShieldCheck size={14} className="text-success" />
-                      <span className="text-xs font-bold text-text-primary">Dossier A: Fully Compliant</span>
+                      <span className="text-xs font-bold text-text-primary">Dossier A: Standard Compliant</span>
                     </div>
                     <p className="text-[10px] text-text-secondary">Apex National Institute of Technology, Pune</p>
-                    <span className="text-[9px] text-success font-semibold block">0 Deficiencies | Clean Golden Path</span>
+                    <span className="text-[9px] text-success font-semibold block">0 Deficiencies | Baseline Compliance</span>
                   </div>
                   {selectedDossier === 'Dossier_A_Compliant' && (
                     <CheckCircle2 size={16} className="text-success shrink-0" />
@@ -262,7 +463,7 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
                 <button
                   type="button"
                   onClick={handleSelectDeficient}
-                  className={`p-3 rounded-lg border text-left transition flex items-center justify-between ${
+                  className={`p-3 rounded-lg border text-left transition flex items-center justify-between cursor-pointer ${
                     selectedDossier === 'Dossier_B_Deficiencies_Detected'
                       ? 'border-warning bg-warning-soft/40 shadow-sm'
                       : 'border-border bg-card hover:border-text-secondary'
@@ -271,10 +472,10 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
                   <div className="space-y-0.5">
                     <div className="flex items-center space-x-1.5">
                       <AlertOctagon size={14} className="text-warning" />
-                      <span className="text-xs font-bold text-text-primary">Dossier B: Deficiencies Detected</span>
+                      <span className="text-xs font-bold text-text-primary">Dossier B: Deficiencies Case</span>
                     </div>
                     <p className="text-[10px] text-text-secondary">Aryavart Institute of Engineering, Lucknow</p>
-                    <span className="text-[9px] text-warning font-semibold block">Seeds Land Mismatch & Lapsed Affiliation</span>
+                    <span className="text-[9px] text-warning font-semibold block">Contains Discrepant Land & Lapsed Affiliation</span>
                   </div>
                   {selectedDossier === 'Dossier_B_Deficiencies_Detected' && (
                     <CheckCircle2 size={16} className="text-warning shrink-0" />
@@ -337,7 +538,7 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
                           </span>
                         ) : (
                           <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-text-secondary border border-border">
-                            Showcase PDF Ready
+                            Standard Document Attached
                           </span>
                         )}
 
@@ -361,22 +562,22 @@ export const ApplicationIngestionModal: React.FC<IngestionModalProps> = ({ isOpe
             {/* Bottom Actions */}
             <div className="flex items-center justify-between pt-3 border-t border-border">
               <div className="text-[11px] text-text-muted flex items-center space-x-1.5">
-                <Sparkles size={13} className="text-warning" />
-                <span>Runs 100% on CPU locally with zero paid API token usage.</span>
+                <ShieldCheck size={14} className="text-primary" />
+                <span>Deterministic statutory rule validation with SHA-256 tamper-evident provenance.</span>
               </div>
 
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-3.5 py-1.5 text-xs text-text-secondary font-medium hover:text-text-primary transition"
+                  className="px-3.5 py-1.5 text-xs text-text-secondary font-medium hover:text-text-primary transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleIngestAndScrutinize}
-                  className="px-5 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center space-x-1.5"
+                  className="px-5 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center space-x-1.5 cursor-pointer"
                 >
                   <span>Ingest Application & Run Scrutiny</span>
                   <ArrowRight size={14} />

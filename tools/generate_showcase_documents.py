@@ -564,7 +564,7 @@ def create_previous_eoa_pdf(output_path: str, inst_name: str):
     pdf.output(output_path)
 
 # 6. Certified Faculty Profile List
-def create_faculty_pdf(output_path: str, inst_name: str):
+def create_faculty_pdf(output_path: str, inst_name: str, is_deficient: bool = False):
     pdf = FPDF(unit="mm", format="A4")
     pdf.add_page()
 
@@ -582,7 +582,7 @@ def create_faculty_pdf(output_path: str, inst_name: str):
     pdf.cell(0, 5, "OFFICIAL CERTIFIED FACULTY CADRE REGISTER (AICTE 1:15/1:20 NORMS)", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("helvetica", "I", 8)
     pdf.set_text_color(71, 85, 105)
-    pdf.cell(0, 4, "Formulated pursuant to AICTE Approval Process Handbook (APH 2025-26) Chapter V", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 4, "Formulated pursuant to AICTE Approval Process Handbook (APH 2025-26) Chapter VII", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(4)
 
     # Faculty Table
@@ -619,8 +619,12 @@ def create_faculty_pdf(output_path: str, inst_name: str):
     pdf.set_font("helvetica", "B", 8)
     pdf.cell(0, 4.5, "Cadre Compliance Ratio Summary:", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("helvetica", "", 7.5)
-    pdf.cell(0, 4, "Total Sanctioned Faculty: 48  |  Professor: 6  |  Associate Professor: 12  |  Assistant Professor: 30", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 4, "Overall Faculty-to-Student Cadre Ratio: 1:17.5 (Fully compliant with AICTE norms <= 1:20)", new_x="LMARGIN", new_y="NEXT")
+    if not is_deficient:
+        pdf.cell(0, 4, "Total Sanctioned Faculty: 48  |  Professor: 6  |  Associate Professor: 12  |  Assistant Professor: 30", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 4, "Overall Faculty-to-Student Cadre Ratio: 1:17.5 (Fully compliant with AICTE norms <= 1:20)", new_x="LMARGIN", new_y="NEXT")
+    else:
+        pdf.cell(0, 4, "Total Sanctioned Faculty: 28  |  Professor: 2  |  Associate Professor: 6  |  Assistant Professor: 20", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 4, "Overall Faculty-to-Student Cadre Ratio: 1:28.5 (Deficit detected: exceeds mandatory ceiling of 1:20)", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(12)
 
     pdf.set_font("helvetica", "B", 8.5)
@@ -646,7 +650,7 @@ def generate_all_showcase_dossiers(base_dir: str):
     create_floorplan_pdf(str(dossier_a / "03_Architectural_Floor_Plan.pdf"), inst_a, "5.25", "4850.00", is_deficient=False)
     create_accreditation_pdf(str(dossier_a / "04_NAAC_Accreditation_Certificate.pdf"), inst_a, "31-12-2028")
     create_previous_eoa_pdf(str(dossier_a / "05_Previous_AICTE_EoA_Approval.pdf"), inst_a)
-    create_faculty_pdf(str(dossier_a / "06_Certified_Faculty_Cadre_List.pdf"), inst_a)
+    create_faculty_pdf(str(dossier_a / "06_Certified_Faculty_Cadre_List.pdf"), inst_a, is_deficient=False)
 
     # Dossier B: Deficiencies Detected
     inst_b = "Aryavart Institute of Engineering & Technology, Lucknow"
@@ -655,7 +659,7 @@ def generate_all_showcase_dossiers(base_dir: str):
     create_floorplan_pdf(str(dossier_b / "03_Architectural_Plan_Deficient_BuiltUp.pdf"), inst_b, "5.25", "2800.00", is_deficient=True)
     create_accreditation_pdf(str(dossier_b / "04_NAAC_Certificate_Expiring_Soon.pdf"), inst_b, "15-04-2025")
     create_previous_eoa_pdf(str(dossier_b / "05_Previous_AICTE_EoA_Approval.pdf"), inst_b)
-    create_faculty_pdf(str(dossier_b / "06_Certified_Faculty_Cadre_List.pdf"), inst_b)
+    create_faculty_pdf(str(dossier_b / "06_Certified_Faculty_Cadre_List.pdf"), inst_b, is_deficient=True)
 
     print(f"Generated 6 Polished Compliant Documents in: {dossier_a}")
     print(f"Generated 6 Polished Deficient Documents in: {dossier_b}")

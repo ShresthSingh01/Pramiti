@@ -31,6 +31,26 @@ export const EvidenceGraphView: React.FC<EvidenceGraphProps> = ({ data, onSelect
     type: 'node' | 'edge';
     data: any;
   } | null>(null);
+  const [filterMode, setFilterMode] = useState<'all' | 'conflicts'>('all');
+
+  const toggleFilter = (mode: 'all' | 'conflicts') => {
+    setFilterMode(mode);
+    if (!cyRef.current) return;
+    if (mode === 'all') {
+      cyRef.current.elements().style('opacity', 1);
+      cyRef.current.fit(undefined, 35);
+    } else {
+      const conflictEdges = cyRef.current.edges('[status = "conflict"]');
+      const connectedNodes = conflictEdges.connectedNodes();
+      const conflictElements = conflictEdges.union(connectedNodes);
+
+      if (conflictElements.length > 0) {
+        cyRef.current.elements().difference(conflictElements).style('opacity', 0.12);
+        conflictElements.style('opacity', 1);
+        cyRef.current.fit(conflictElements, 50);
+      }
+    }
+  };
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -336,33 +356,65 @@ export const EvidenceGraphView: React.FC<EvidenceGraphProps> = ({ data, onSelect
             </span>
           </div>
 
-          {/* Interactive Zoom & Fit Toolbar */}
-          <div className="glass-card p-1 rounded-xl border border-border flex items-center space-x-1 shadow-md pointer-events-auto">
-            <button
-              type="button"
-              onClick={zoomIn}
-              title="Zoom In"
-              className="p-1.5 rounded-lg hover:bg-card text-text-secondary hover:text-text-primary transition cursor-pointer"
-            >
-              <ZoomIn size={14} />
-            </button>
-            <button
-              type="button"
-              onClick={zoomOut}
-              title="Zoom Out"
-              className="p-1.5 rounded-lg hover:bg-card text-text-secondary hover:text-text-primary transition cursor-pointer"
-            >
-              <ZoomOut size={14} />
-            </button>
-            <button
-              type="button"
-              onClick={fitGraph}
-              title="Fit Graph to Viewport"
-              className="px-2.5 py-1 rounded-lg hover:bg-card text-primary font-bold text-[10px] flex items-center space-x-1 transition cursor-pointer"
-            >
-              <Maximize2 size={12} />
-              <span>Fit View</span>
-            </button>
+          {/* Interactive Zoom & Filter Toolbar */}
+          <div className="flex items-center space-x-2 pointer-events-auto">
+            {/* Conflict Filter Toggle */}
+            <div className="glass-card p-1 rounded-xl border border-border flex items-center space-x-1 shadow-md">
+              <button
+                type="button"
+                onClick={() => toggleFilter('all')}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer ${
+                  filterMode === 'all'
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'text-text-secondary hover:text-text-primary'
+                }`}
+              >
+                All Nodes ({data?.nodes?.length || 0})
+              </button>
+              <button
+                type="button"
+                onClick={() => toggleFilter('conflicts')}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer flex items-center space-x-1 ${
+                  filterMode === 'conflicts'
+                    ? 'bg-danger text-white shadow-sm'
+                    : 'text-danger hover:bg-danger-soft'
+                }`}
+              >
+                <span>⚠️ Conflicts Only</span>
+                <span className="font-mono text-[9px] px-1 py-0.2 rounded bg-black/20">
+                  {(data?.edges || []).filter((e: any) => e.status === 'conflict').length}
+                </span>
+              </button>
+            </div>
+
+            {/* Zoom Controls */}
+            <div className="glass-card p-1 rounded-xl border border-border flex items-center space-x-1 shadow-md">
+              <button
+                type="button"
+                onClick={zoomIn}
+                title="Zoom In"
+                className="p-1.5 rounded-lg hover:bg-card text-text-secondary hover:text-text-primary transition cursor-pointer"
+              >
+                <ZoomIn size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={zoomOut}
+                title="Zoom Out"
+                className="p-1.5 rounded-lg hover:bg-card text-text-secondary hover:text-text-primary transition cursor-pointer"
+              >
+                <ZoomOut size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={fitGraph}
+                title="Fit Graph to Viewport"
+                className="px-2.5 py-1 rounded-lg hover:bg-card text-primary font-bold text-[10px] flex items-center space-x-1 transition cursor-pointer"
+              >
+                <Maximize2 size={12} />
+                <span>Fit View</span>
+              </button>
+            </div>
           </div>
         </div>
 

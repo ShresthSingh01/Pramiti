@@ -25,7 +25,7 @@ def _acquire_slot() -> bool:
 
         if len(_request_times) >= settings.GEMINI_RPM_LIMIT:
             wait_seconds = _request_times[0] + 60.0 - now
-            if wait_seconds > settings.GEMINI_MAX_WAIT_SECONDS:
+            if wait_seconds > min(1.0, float(settings.GEMINI_MAX_WAIT_SECONDS)):
                 logger.warning(
                     "Gemini rate limit reached; request deferred for %.1f seconds",
                     wait_seconds,

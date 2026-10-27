@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  pramiti:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pramiti_app
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      - JWT_SECRET=${JWT_SECRET:-evidencegraph-dev-super-secret-key-aicte-sih-2026}
+    volumes:
+      - pramiti_data:/app/backend/storage
+    restart: unless-stopped
+
+volumes:
+  pramiti_data:

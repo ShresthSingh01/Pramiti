@@ -153,6 +153,10 @@ async def create_application_with_dossier(
         if matched_type:
             res = await db.execute(select(Document).where(Document.application_id == app_id, Document.doc_type == matched_type))
             doc = res.scalars().first()
+            if doc and doc.file_path and os.path.exists(doc.file_path) and doc.status != DocStatus.MISSING:
+                # Document was already provided via manual upload, keep existing file
+                continue
+
             if not doc:
                 doc = Document(
                     id=f"{app_id}_{uuid.uuid4().hex[:8]}",
@@ -231,6 +235,10 @@ async def load_dossier_into_application(
         if matched_type:
             res = await db.execute(select(Document).where(Document.application_id == app_id, Document.doc_type == matched_type))
             doc = res.scalars().first()
+            if doc and doc.file_path and os.path.exists(doc.file_path) and doc.status != DocStatus.MISSING:
+                # Document was already provided via manual upload, keep existing file
+                continue
+
             if not doc:
                 doc = Document(
                     id=f"{app_id}_{uuid.uuid4().hex[:8]}",

@@ -19,5 +19,8 @@ for p in [str(ROOT_DIR), str(BACKEND_DIR)]:
         sys.path.insert(0, p)
 
 if __name__ == "__main__":
-    print(f"Starting PRAMITI Backend from {ROOT_DIR} on http://127.0.0.1:8000 ...")
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True, app_dir=str(BACKEND_DIR))
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", 8000))
+    print(f"Starting PRAMITI All-in-One Engine on http://localhost:{port} (host: {host}) ...")
+    print(f"Serving API and built React Frontend on single port {port}.")
+    uvicorn.run("app.main:app", host=host, port=port, reload=True, app_dir=str(BACKEND_DIR))

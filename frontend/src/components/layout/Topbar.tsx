@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Bell, LogOut, ShieldCheck, Sparkles } from 'lucide-react';
+import { Search, Bell, LogOut, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { logout } from '../../lib/api';
 import { ThemeToggle } from '../shared/ThemeToggle';
@@ -7,16 +7,12 @@ import { Theme } from '../../lib/theme';
 
 interface TopbarProps {
   hasUnreadAlerts: boolean;
-  hasSynthetic: boolean;
-  onPurgeSynthetic: () => void;
   theme: Theme;
   onToggleTheme: () => void;
 }
 
 export const Topbar: React.FC<TopbarProps> = ({
   hasUnreadAlerts,
-  hasSynthetic,
-  onPurgeSynthetic,
   theme,
   onToggleTheme,
 }) => {
@@ -45,22 +41,14 @@ export const Topbar: React.FC<TopbarProps> = ({
         />
       </div>
 
+      {/* Regulatory Badge */}
+      <div className="hidden lg:flex items-center space-x-2 px-3 py-1 rounded-xl bg-card border border-border/80 text-xs">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <span className="font-mono text-[11px] font-semibold text-text-secondary">Regulation Bureau • Approval Cycle 2025-26</span>
+      </div>
+
       {/* Right Action Icons & Controls */}
       <div className="flex items-center space-x-3.5">
-        {/* Synthetic Demonstration Active Warning Banner */}
-        {hasSynthetic && (
-          <div className="hidden sm:flex items-center space-x-2 bg-amber-500/10 text-amber-500 text-[11px] font-semibold px-3 py-1 rounded-lg border border-amber-500/30">
-            <Sparkles size={13} className="text-amber-500 animate-pulse" />
-            <span>Synthetic Demo Active</span>
-            <button
-              onClick={onPurgeSynthetic}
-              className="text-danger underline hover:text-red-400 ml-1 font-bold cursor-pointer transition-colors"
-            >
-              Purge
-            </button>
-          </div>
-        )}
-
         {/* Theme Toggle (Light / Dark) */}
         <ThemeToggle theme={theme} onToggle={onToggleTheme} />
 

@@ -46,16 +46,16 @@ class VerificationOrchestrator:
         if doc_type == "University NOC / Affiliation":
             source = "State Technical University Portal API"
             simulated = True
-            log.append({"time": now, "event": "Query dispatched to affiliating university registry"})
+            log.append({"time": now, "event": "[SIMULATED DEMO] Query dispatched to affiliating university registry adapter"})
             
             # Check for simulated expiry or mismatch
             expiry = fact_map.get("expiry_date", "")
             if any(yr in expiry for yr in ["2023", "2024", "2025"]):
                 status = "expired"
-                log.append({"time": now, "event": f"University registry confirms NOC lapsed on {expiry}"})
+                log.append({"time": now, "event": f"[SIMULATED DEMO] University registry confirms NOC lapsed on {expiry}"})
             else:
                 status = "verified"
-                log.append({"time": now, "event": "NOC valid and digitally cross-referenced against Gazette register"})
+                log.append({"time": now, "event": "[SIMULATED DEMO] NOC valid and digitally cross-referenced against Gazette register"})
             
             fields = [
                 {"name": "University Registry Code", "value": "STU/AFFIL/2025-26/9182", "match": True},
@@ -66,9 +66,9 @@ class VerificationOrchestrator:
         elif doc_type == "NAAC / NBA Accreditation":
             source = "National Board of Accreditation (NBA) Repository"
             simulated = True
-            log.append({"time": now, "event": "Query sent to Central Accreditation Database"})
+            log.append({"time": now, "event": "[SIMULATED DEMO] Query dispatched to Central Accreditation Database adapter"})
             status = "verified"
-            log.append({"time": now, "event": "Accreditation Tier-1 certified with Grade A+"})
+            log.append({"time": now, "event": "[SIMULATED DEMO] Accreditation Tier-1 certified with Grade A+"})
             fields = [
                 {"name": "Accreditation Ref", "value": "NBA-ENGG-2024-8841", "match": True},
                 {"name": "Status", "value": "Accredited (Tier-1)", "match": True}
@@ -77,9 +77,9 @@ class VerificationOrchestrator:
         elif doc_type == "Registered Affidavit / Undertaking":
             source = "E-Stamping Digital Repository (SHCIL)"
             simulated = False # Real QR/e-stamp verification pipeline
-            log.append({"time": now, "event": "Scanning 2D Barcode and digital e-stamp certificate"})
+            log.append({"time": now, "event": "[LIVE] Scanning 2D Barcode and digital e-stamp certificate"})
             status = "verified"
-            log.append({"time": now, "event": "E-Stamp Certificate verified. Notary registration valid."})
+            log.append({"time": now, "event": "[LIVE] E-Stamp Certificate verified. Notary registration valid."})
             fields = [
                 {"name": "Certificate No", "value": "IN-DL98231049281720Z", "match": True},
                 {"name": "Stamp Duty Paid", "value": "INR 100/-", "match": True},
@@ -89,14 +89,14 @@ class VerificationOrchestrator:
         elif doc_type == "Architectural Floor Plan":
             source = "Council of Architecture (CoA) Registry"
             simulated = True
-            log.append({"time": now, "event": "Querying Architect Registration Council"})
+            log.append({"time": now, "event": "[SIMULATED DEMO] Querying Architect Registration Council adapter"})
             built_up = fact_map.get("built_up_area")
             if built_up and float(str(built_up).replace(",", "")) < 3000:
                 status = "mismatch_detected"
-                log.append({"time": now, "event": "Discrepancy: Floor area below mandatory instructional norms"})
+                log.append({"time": now, "event": "[SIMULATED DEMO] Discrepancy: Floor area below mandatory instructional norms"})
             else:
                 status = "verified"
-                log.append({"time": now, "event": "Licensed Architect signature and CA license seal confirmed"})
+                log.append({"time": now, "event": "[SIMULATED DEMO] Licensed Architect signature and CA license seal confirmed"})
             fields = [
                 {"name": "CoA License No", "value": "CA/2012/58129", "match": True},
                 {"name": "Architect Name", "value": "Ar. R. K. Sharma", "match": True}
@@ -106,7 +106,7 @@ class VerificationOrchestrator:
             source = "AICTE Document Registry"
             simulated = False
             status = "verified"
-            log.append({"time": now, "event": "Document checksum registered and verified"})
+            log.append({"time": now, "event": "[LIVE] Document checksum registered and verified"})
 
         return {
             "source": source,

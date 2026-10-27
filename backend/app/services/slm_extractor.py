@@ -49,7 +49,7 @@ Do NOT hallucinate. Only extract fields explicitly stated in the text.
 
 import socket
 
-def _is_ollama_online(timeout: float = 0.25) -> bool:
+def _is_ollama_online(timeout: float = 0.1) -> bool:
     try:
         with socket.create_connection(("127.0.0.1", 11434), timeout=timeout):
             return True

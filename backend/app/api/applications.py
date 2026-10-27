@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 from typing import List, Optional, Dict, Any
@@ -9,6 +10,7 @@ import shutil
 import hashlib
 import uuid
 import asyncio
+from datetime import datetime
 
 from app.core.config import settings
 from app.core.database import get_db
@@ -28,8 +30,21 @@ router = APIRouter(prefix="/applications", tags=["Applications"])
 STORAGE_ROOT = str(settings.DOCUMENTS_DIR)
 os.makedirs(STORAGE_ROOT, exist_ok=True)
 
+def _process_single_doc_payload(doc_id: str, doc_name: str, doc_type: str, file_path: str):
+    facts_data = extract_pdf_facts_and_boxes(file_path)
+    v_res = VerificationOrchestrator.verify_document(doc_type, file_path, facts_data)
+    f_indicators = analyze_document_forensics(file_path)
+    return {
+        "doc_id": doc_id,
+        "doc_name": doc_name,
+        "doc_type": doc_type,
+        "facts_data": facts_data,
+        "v_res": v_res,
+        "f_indicators": f_indicators
+    }
+
 async def run_pipeline_for_application(app_id: str, db_session_factory):
-    """Sequential batch processor for all application documents with zero SQLite lock contention."""
+    """High-speed parallel batch processor for application documents with zero SQLite lock contention."""
     try:
         async with db_session_factory() as db:
             app = await db.get(Application, app_id)
@@ -44,21 +59,25 @@ async def run_pipeline_for_application(app_id: str, db_session_factory):
 
             # Clear prior facts and findings for clean idempotency
             await db.execute(delete(Finding).where(Finding.application_id == app_id))
+            
+            valid_docs = [d for d in docs if d.file_path and os.path.exists(d.file_path)]
+            for d in valid_docs:
+                await db.execute(delete(Fact).where(Fact.document_id == d.id))
+                await db.execute(delete(Verification).where(Verification.document_id == d.id))
+
+            # 1 & 2. Parallel OCR, Verification, and Forensics across threadpool
+            doc_results = await asyncio.gather(*[
+                asyncio.to_thread(_process_single_doc_payload, d.id, d.name, d.doc_type, d.file_path)
+                for d in valid_docs
+            ])
+
             all_facts_list = []
-            for doc in docs:
-                if not doc.file_path or not os.path.exists(doc.file_path):
-                    continue
-
-                await db.execute(delete(Fact).where(Fact.document_id == doc.id))
-                await db.execute(delete(Verification).where(Verification.document_id == doc.id))
-
-                # 1. OCR & Field Extraction (offloaded to threadpool to avoid event loop starvation)
-                facts_data = await asyncio.to_thread(extract_pdf_facts_and_boxes, doc.file_path)
-                for fd in facts_data:
+            for item in doc_results:
+                for fd in item["facts_data"]:
                     f_id = f"fact_{uuid.uuid4().hex[:12]}"
                     fact_ent = Fact(
                         id=f_id,
-                        document_id=doc.id,
+                        document_id=item["doc_id"],
                         field=fd["field"],
                         value=fd["value"],
                         page=fd["page"],
@@ -69,11 +88,10 @@ async def run_pipeline_for_application(app_id: str, db_session_factory):
                     db.add(fact_ent)
                     all_facts_list.append(fd)
 
-                # 2. Document Authentication & Source Verification (offloaded to threadpool)
-                v_res = await asyncio.to_thread(VerificationOrchestrator.verify_document, doc.doc_type, doc.file_path, facts_data)
+                v_res = item["v_res"]
                 v_ent = Verification(
                     id=f"verif_{uuid.uuid4().hex[:12]}",
-                    document_id=doc.id,
+                    document_id=item["doc_id"],
                     source=v_res["source"],
                     status=VerifyStatus(v_res["status"]),
                     simulated=v_res["simulated"],
@@ -82,15 +100,13 @@ async def run_pipeline_for_application(app_id: str, db_session_factory):
                 )
                 db.add(v_ent)
 
-                # 2b. PDF & Document Forensics Analysis
-                f_indicators = await asyncio.to_thread(analyze_document_forensics, doc.file_path)
-                for fi in f_indicators:
+                for fi in item["f_indicators"]:
                     if fi.get("severity") in ["high", "medium"]:
                         f_id = f"FND-FRNSC-{uuid.uuid4().hex[:8]}"
                         db.add(Finding(
                             id=f_id,
                             application_id=app_id,
-                            doc_id=doc.id,
+                            doc_id=item["doc_id"],
                             rule_id="R-FORENSIC-01",
                             clause_ref="AICTE APH Sec 5.1 - Document Authenticity",
                             handbook_version="2025-26",
@@ -101,7 +117,7 @@ async def run_pipeline_for_application(app_id: str, db_session_factory):
                             confidence=fi["confidence"],
                             evidence={
                                 "method": fi["method"],
-                                "primary_doc": doc.name,
+                                "primary_doc": item["doc_name"],
                                 "is_indicator_only": fi.get("is_indicator_only", True)
                             },
                             analysis={
@@ -193,6 +209,14 @@ async def run_pipeline_for_application(app_id: str, db_session_factory):
         print(f"[APPLICATION PIPELINE ERROR] for app_id {app_id}: {e}", flush=True)
         import traceback
         traceback.print_exc()
+        try:
+            async with db_session_factory() as db_err:
+                app_err = await db_err.get(Application, app_id)
+                if app_err and app_err.status in [ApplicationStatus.AI_ANALYSIS, ApplicationStatus.VERIFICATION, ApplicationStatus.SUBMITTED]:
+                    app_err.status = ApplicationStatus.OFFICER_REVIEW
+                    await db_err.commit()
+        except Exception:
+            pass
 
 async def run_pipeline_for_document(doc_id: str, app_id: str, db_session_factory):
     """Background processor for uploaded application documents."""
@@ -493,7 +517,12 @@ async def get_application_detail(id: str, db: AsyncSession = Depends(get_db)):
         "status": app.status.value,
         "riskScore": app.risk_score,
         "isSynthetic": app.is_synthetic,
-        "checklist": checklist
+        "checklist": checklist,
+        "decision": app.decision,
+        "decisionRemarks": app.decision_remarks,
+        "decisionBy": app.decision_by,
+        "decisionAt": str(app.decision_at) if app.decision_at else None,
+        "version": app.version or 1
     }
 
 @router.post("/{id}/documents")
@@ -832,6 +861,7 @@ async def get_document_markers(
         marker_key = f"{f.rule_id}_{doc_id}_{target_field or f.id}"
         if marker_key not in seen_marker_keys:
             seen_marker_keys.add(marker_key)
+            is_est = bbox_to_use == [0.28, 0.12, 0.36, 0.88]
             markers.append({
                 "id": f"err_{f.id}_{doc.id}",
                 "rule_id": f.rule_id,
@@ -845,7 +875,9 @@ async def get_document_markers(
                 "description": f.description,
                 "cross_doc": ev.get("cross_doc") if is_primary else ev.get("primary_doc"),
                 "cross_phrase": ev.get("cross_phrase") if is_primary else ev.get("phrase"),
-                "remediation": f.suggested_fix
+                "remediation": f.suggested_fix,
+                "bbox_is_estimated": is_est,
+                "grounding_method": "multi_doc_coordinate_reconciliation" if not is_est else "heuristic_inferred_coordinate"
             })
 
     # Add verified statutory facts so officer can review other extracted fields
@@ -857,6 +889,7 @@ async def get_document_markers(
             continue
         if fact_key not in seen_marker_keys:
             seen_marker_keys.add(fact_key)
+            is_est = "inferred" in (fact.extractor_method or "") or "heuristic" in (fact.extractor_method or "")
             markers.append({
                 "id": f"fact_{fact.id}",
                 "rule_id": None,
@@ -868,7 +901,9 @@ async def get_document_markers(
                 "page": fact.page,
                 "bbox": fact.bbox,
                 "description": f"Statutory {fact.field.replace('_', ' ')}: {fact.value}",
-                "confidence": fact.confidence
+                "confidence": fact.confidence,
+                "bbox_is_estimated": is_est,
+                "grounding_method": fact.extractor_method or ("heuristic_inferred_coordinate" if is_est else "lexical_exact_coordinate")
             })
 
     verif_res = await db.execute(select(Verification).where(Verification.document_id == doc_id))
@@ -966,5 +1001,250 @@ async def resubmit_application(
         "version": app.version,
         "status": app.status.value
     }
+
+class OfficerDecisionRequest(BaseModel):
+    decision: str  # "RECOMMEND_APPROVAL" | "ISSUE_DEFICIENCY_NOTICE" | "RECOMMEND_EVC_INSPECTION" | "REJECT"
+    remarks: str
+    officer_name: Optional[str] = "Er. Rajesh Verma"
+    officer_role: Optional[str] = "Scrutiny Officer"
+    deficiency_ids: Optional[List[str]] = None
+    rectification_deadline_days: Optional[int] = 14
+    evc_scope: Optional[List[str]] = None
+
+@router.post("/{id}/decision", summary="Record Statutory Scrutiny Determination")
+async def record_officer_decision(
+    id: str,
+    req: OfficerDecisionRequest,
+    db: AsyncSession = Depends(get_db)
+):
+    app = await db.get(Application, id)
+    if not app:
+        raise HTTPException(status_code=404, detail=f"Application {id} not found")
+
+    decision_map = {
+        "RECOMMEND_APPROVAL": (ApplicationStatus.APPROVED, "RECOMMENDED_FOR_APPROVAL"),
+        "ISSUE_DEFICIENCY_NOTICE": (ApplicationStatus.DEFICIENCY_COMMUNICATED, "DEFICIENCY_NOTICE_COMMUNICATED"),
+        "RECOMMEND_EVC_INSPECTION": (ApplicationStatus.EVC_INSPECTION_RECOMMENDED, "EVC_PHYSICAL_INSPECTION_RECOMMENDED"),
+        "REJECT": (ApplicationStatus.REJECTED, "APPLICATION_REJECTED_WITH_CAUSE"),
+    }
+
+    if req.decision not in decision_map:
+        raise HTTPException(status_code=400, detail=f"Invalid decision '{req.decision}'. Must be one of: {list(decision_map.keys())}")
+
+    target_status, audit_action = decision_map[req.decision]
+    app.status = target_status
+    app.decision = req.decision
+    app.decision_remarks = req.remarks
+    app.decision_by = req.officer_name or "Er. Rajesh Verma (Scrutiny Officer)"
+    app.decision_at = datetime.utcnow()
+    if req.decision in ["RECOMMEND_APPROVAL", "REJECT"]:
+        app.completed_at = datetime.utcnow()
+
+    decision_ref = f"AICTE/DEC/2026-{app.id[-6:]}-{datetime.utcnow().strftime('%m%d%H%M')}"
+
+    await record_audit(
+        db,
+        actor=f"{req.officer_name} ({req.officer_role})",
+        action=audit_action,
+        payload={
+            "application_id": id,
+            "decision": req.decision,
+            "decision_ref": decision_ref,
+            "remarks": req.remarks,
+            "rectification_deadline_days": req.rectification_deadline_days,
+            "evc_scope": req.evc_scope or [],
+            "timestamp": str(app.decision_at)
+        },
+        application_id=id
+    )
+
+    alert_messages = {
+        "RECOMMEND_APPROVAL": f"Officer Scrutiny Endorsement: Application {app.id} cleared for EoA Approval by {req.officer_name}. Scrutiny Order: {decision_ref}.",
+        "ISSUE_DEFICIENCY_NOTICE": f"Official Deficiency Notice [{decision_ref}] issued to applicant institution with a {req.rectification_deadline_days}-day rectification window. Reason: {req.remarks}",
+        "RECOMMEND_EVC_INSPECTION": f"Expert Visit Committee (EVC) physical inspection flagged for Application {app.id}. Scope: {', '.join(req.evc_scope or ['Campus Infrastructure Verification'])}.",
+        "REJECT": f"Adverse Scrutiny Order issued for Application {app.id}. Escalated to Standing Appellate Committee (SAC). Ref: {decision_ref}."
+    }
+
+    alert = Alert(
+        id=f"alert_{uuid.uuid4().hex[:10]}",
+        application_id=app.id,
+        trigger=f"Statutory Determination: {req.decision.replace('_', ' ')}",
+        message=alert_messages[req.decision],
+        recipient_role="scrutiny_officer",
+        created_at=datetime.utcnow()
+    )
+    db.add(alert)
+    await db.commit()
+
+    return {
+        "status": "success",
+        "decision": app.decision,
+        "applicationStatus": app.status.value,
+        "decisionRef": decision_ref,
+        "decisionBy": app.decision_by,
+        "decisionAt": str(app.decision_at),
+        "message": f"Statutory determination '{req.decision}' recorded successfully."
+    }
+
+@router.post("/{id}/simulate-rectification", summary="Simulate Applicant Rectification Dossier Submission")
+async def simulate_applicant_rectification(
+    id: str,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Simulates the applicant institution uploading a rectified submission
+    (replaces deficient documents with compliant counterparts from Dossier A).
+    Increments application version, clears prior findings, and triggers re-validation.
+    """
+    app = await db.get(Application, id)
+    if not app:
+        raise HTTPException(status_code=404, detail=f"Application {id} not found")
+
+    sample_compliant_dir = str(settings.SAMPLE_DOCS_DIR / "Dossier_A_Compliant")
+    if not os.path.exists(sample_compliant_dir):
+        raise HTTPException(status_code=404, detail="Compliant benchmark dossier not found on server")
+
+    type_mapping = [
+        (["affidavit"], "Registered Affidavit / Undertaking"),
+        (["noc", "affiliation"], "University NOC / Affiliation"),
+        (["floor", "architectural", "plan"], "Architectural Floor Plan"),
+        (["naac", "nba", "accreditation"], "NAAC / NBA Accreditation"),
+        (["eoa", "approval"], "Previous Year EoA Approval Order"),
+        (["faculty"], "Certified Faculty Profile List")
+    ]
+
+    docs_res = await db.execute(select(Document).where(Document.application_id == id))
+    existing_docs = {d.doc_type: d for d in docs_res.scalars().all()}
+
+    os.makedirs(STORAGE_ROOT, exist_ok=True)
+    for filename in os.listdir(sample_compliant_dir):
+        if not filename.endswith(".pdf"):
+            continue
+        src = os.path.join(sample_compliant_dir, filename)
+        dest_filename = f"{id}_{filename}"
+        dest = os.path.join(STORAGE_ROOT, dest_filename)
+        shutil.copyfile(src, dest)
+
+        matched_type = None
+        fname_lower = filename.lower()
+        for keywords, official_name in type_mapping:
+            if any(k in fname_lower for k in keywords):
+                matched_type = official_name
+                break
+
+        if matched_type:
+            if matched_type in existing_docs:
+                d = existing_docs[matched_type]
+                d.file_path = dest
+                d.file_url = f"/api/files/{dest_filename}"
+                d.name = filename
+                d.status = DocStatus.ANALYZING
+            else:
+                new_doc = Document(
+                    id=f"doc_{uuid.uuid4().hex[:10]}",
+                    application_id=id,
+                    name=filename,
+                    doc_type=matched_type,
+                    file_path=dest,
+                    file_url=f"/api/files/{dest_filename}",
+                    status=DocStatus.ANALYZING,
+                    required=True
+                )
+                db.add(new_doc)
+
+    doc_ids = [d.id for d in existing_docs.values()]
+    if doc_ids:
+        await db.execute(delete(Fact).where(Fact.document_id.in_(doc_ids)))
+    await db.execute(delete(Finding).where(Finding.application_id == id))
+    await db.execute(delete(Edge).where(Edge.application_id == id))
+
+    prior_ver = app.version or 1
+    app.version = prior_ver + 1
+    app.status = ApplicationStatus.AI_ANALYSIS
+    app.decision = None
+    app.decision_remarks = None
+    app.decision_by = None
+    app.decision_at = None
+    await db.commit()
+
+    await record_audit(
+        db,
+        actor="Applicant Institution (Trust Management)",
+        action="APPLICATION_RECTIFIED_RESUBMISSION",
+        payload={
+            "application_id": id,
+            "prior_version": prior_ver,
+            "new_version": app.version,
+            "notes": "Institution uploaded rectified statutory affidavit & renewed university NOC."
+        },
+        application_id=id
+    )
+
+    from app.core.database import AsyncSessionLocal
+    background_tasks.add_task(run_pipeline_for_application, id, AsyncSessionLocal)
+
+    return {
+        "status": "success",
+        "message": f"Rectified dossier submitted for Application {id}. Re-scrutiny pipeline active (Version v{app.version}).",
+        "version": app.version
+    }
+
+@router.get("/{id}/report")
+async def download_scrutiny_report(
+    id: str,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Generates and downloads the official AICTE Preliminary Application Scrutiny & Regulatory Verification Report (PDF).
+    """
+    from app.pipeline.report_generator import generate_validation_pdf
+    import tempfile
+
+    app = await db.get(Application, id)
+    if not app:
+        raise HTTPException(status_code=404, detail=f"Application {id} not found")
+
+    inst = await db.get(Institution, app.institution_id)
+    inst_name = inst.name if inst else "Apex Technical Institution"
+
+    findings_res = await db.execute(select(Finding).where(Finding.application_id == id))
+    findings = findings_res.scalars().all()
+    findings_list = [
+        {
+            "id": f.id,
+            "title": f.title,
+            "severity": f.severity.value,
+            "clause_ref": f.clause_ref,
+            "handbook_version": f.handbook_version,
+            "description": f.description,
+            "suggested_fix": f.suggested_fix
+        }
+        for f in findings
+    ]
+
+    docs_res = await db.execute(select(Document).where(Document.application_id == id))
+    docs = docs_res.scalars().all()
+    checklist = [
+        {"docType": d.doc_type, "name": d.name, "status": d.status.value}
+        for d in docs
+    ]
+
+    app_data = {
+        "id": app.id,
+        "institutionName": inst_name,
+        "category": app.category,
+        "riskScore": app.risk_score
+    }
+
+    temp_dir = tempfile.gettempdir()
+    out_pdf = os.path.join(temp_dir, f"AICTE_Scrutiny_Report_{app.id}.pdf")
+    generate_validation_pdf(app_data, findings_list, checklist, out_pdf)
+
+    return FileResponse(
+        out_pdf,
+        media_type="application/pdf",
+        filename=f"AICTE_Scrutiny_Report_{app.id}.pdf"
+    )
 
 

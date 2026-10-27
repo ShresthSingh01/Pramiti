@@ -11,12 +11,19 @@ import {
   MessageSquare,
   AlertCircle,
   FileText,
-  Sparkles,
-  Trash2
+  Network,
+  ShieldCheck,
+  Trash2,
+  CheckCircle2,
+  Building2,
+  XCircle,
+  RotateCcw,
+  Send
 } from 'lucide-react';
 import api, { ApplicationDetail, Finding } from '../../lib/api';
 import { VisualDocumentInspector } from './VisualDocumentInspector';
 import { ClarificationModal } from '../../components/shared/ClarificationModal';
+import { OfficerDecisionModal, DecisionType } from '../../components/shared/OfficerDecisionModal';
 
 const EvidenceGraphView = React.lazy(() =>
   import('./EvidenceGraph').then((m) => ({ default: m.EvidenceGraphView }))
@@ -36,6 +43,27 @@ export const ApplicationDetailView: React.FC = () => {
   const [uploadingDocType, setUploadingDocType] = useState<string | null>(null);
   const [clarificationFinding, setClarificationFinding] = useState<Finding | null>(null);
   const [clarificationSuccessMsg, setClarificationSuccessMsg] = useState<string | null>(null);
+  const [isDecisionModalOpen, setIsDecisionModalOpen] = useState(false);
+  const [decisionModalType, setDecisionModalType] = useState<DecisionType>('RECOMMEND_APPROVAL');
+  const [isSimulatingRectification, setIsSimulatingRectification] = useState(false);
+  const [decisionSuccessMsg, setDecisionSuccessMsg] = useState<string | null>(null);
+
+  const handleSimulateRectification = async () => {
+    if (!id) return;
+    if (window.confirm("Simulate Applicant Rectification Dossier Submission?\n\nThis replaces deficient documents with compliant counterparts and triggers an automated re-validation pass.")) {
+      try {
+        setIsSimulatingRectification(true);
+        const res = await api.post(`/applications/${id}/simulate-rectification`);
+        setDecisionSuccessMsg(res.data.message || "Applicant rectified dossier submitted. Re-validation pipeline queued.");
+        await fetchData(false);
+      } catch (err: any) {
+        console.error("Failed to simulate rectification:", err);
+        alert(err.response?.data?.detail || "Failed to submit rectified dossier.");
+      } finally {
+        setIsSimulatingRectification(false);
+      }
+    }
+  };
 
   const handleDeleteApp = async () => {
     if (!id) return;
@@ -99,18 +127,6 @@ export const ApplicationDetailView: React.FC = () => {
       form.append('doc_type', docType);
       form.append('file', file);
       await api.post(`/applications/${id}/documents`, form);
-      await fetchData(false);
-    } catch (err) {
-      console.error(err);
-      setUploadingDocType(null);
-    }
-  };
-
-  const handleBatchLoadDossier = async (dossierId: string) => {
-    if (!id) return;
-    try {
-      setUploadingDocType('batch');
-      await api.post(`/sample-dossiers/load-into-app?app_id=${id}&dossier_id=${dossierId}`);
       await fetchData(false);
     } catch (err) {
       console.error(err);
@@ -213,11 +229,6 @@ export const ApplicationDetailView: React.FC = () => {
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary-soft text-primary border border-primary/20 uppercase">
                 {detail.category}
               </span>
-              {detail.isSynthetic && (
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/15 text-amber-500 border border-amber-500/30">
-                  SHOWCASE DEMO
-                </span>
-              )}
             </div>
             <p className="text-xs text-text-muted mt-1 font-mono">
               App ID: <strong className="text-text-secondary">{detail.id}</strong> | Regulation Handbook: AICTE APH 2025-26
@@ -250,10 +261,14 @@ export const ApplicationDetailView: React.FC = () => {
           </div>
 
           <button
-            onClick={() => alert(`Official Scrutiny Report Generated for Application ID: ${detail.id}\nStatus: ${detail.status.toUpperCase()}\nVerified Documents: ${detail.checklist.filter(c => c.status === 'verified').length}/6`)}
-            className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold rounded-xl transition shadow-md shadow-blue-600/25 active:scale-95 cursor-pointer"
+            onClick={() => {
+              const base = api.defaults.baseURL || '/api';
+              window.open(`${base}/applications/${detail.id}/report`, '_blank');
+            }}
+            className="flex items-center space-x-1.5 px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold rounded-xl transition shadow-md shadow-blue-600/25 active:scale-95 cursor-pointer"
           >
-            Download Scrutiny Report
+            <FileText size={14} />
+            <span>Download Scrutiny Report (PDF)</span>
           </button>
 
           <button
@@ -266,6 +281,136 @@ export const ApplicationDetailView: React.FC = () => {
             <span>{deleting ? 'Deleting...' : 'Delete'}</span>
           </button>
         </div>
+      </div>
+
+      {/* Officer Statutory Determination & Next Steps Console */}
+      <div className="bg-card rounded-2xl border border-border p-4 shadow-card space-y-3.5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center space-x-2.5">
+            <div className="p-2 bg-blue-500/10 text-primary border border-primary/20 rounded-xl">
+              <ShieldCheck size={20} />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <h3 className="text-xs font-bold text-text-primary uppercase tracking-wider">
+                  Officer Statutory Scrutiny Determination
+                </h3>
+                <span className="px-2 py-0.2 rounded-full text-[9px] font-mono font-bold bg-primary-soft text-primary border border-primary/20">
+                  AICTE APH 2025-26 Mandate
+                </span>
+              </div>
+              <p className="text-[11px] text-text-muted mt-0.5">
+                AI flags are decision-support outputs. Statutory scrutiny, physical inspection recommendations, and final regulatory determinations remain with authorized officials.
+              </p>
+            </div>
+          </div>
+
+          {/* Action Trigger Buttons */}
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => { setDecisionModalType('RECOMMEND_APPROVAL'); setIsDecisionModalOpen(true); }}
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/25 border border-emerald-500/30 text-xs font-bold rounded-xl transition shadow-sm cursor-pointer"
+              title="Recommend Application for Extension of Approval"
+            >
+              <CheckCircle2 size={14} />
+              <span>Recommend Approval</span>
+            </button>
+
+            <button
+              onClick={() => { setDecisionModalType('ISSUE_DEFICIENCY_NOTICE'); setIsDecisionModalOpen(true); }}
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-amber-500/15 text-amber-600 dark:text-amber-400 hover:bg-amber-500/25 border border-amber-500/30 text-xs font-bold rounded-xl transition shadow-sm cursor-pointer"
+              title="Dispatch formal deficiency notice and open rectification window"
+            >
+              <AlertTriangle size={14} />
+              <span>Issue Deficiency Notice</span>
+            </button>
+
+            <button
+              onClick={() => { setDecisionModalType('RECOMMEND_EVC_INSPECTION'); setIsDecisionModalOpen(true); }}
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-blue-500/15 text-blue-600 dark:text-blue-400 hover:bg-blue-500/25 border border-blue-500/30 text-xs font-bold rounded-xl transition shadow-sm cursor-pointer"
+              title="Flag application for physical inspection by Expert Visit Committee"
+            >
+              <Building2 size={14} />
+              <span>Recommend Physical EVC</span>
+            </button>
+
+            <button
+              onClick={() => { setDecisionModalType('REJECT'); setIsDecisionModalOpen(true); }}
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-red-500/15 text-red-600 dark:text-red-400 hover:bg-red-500/25 border border-red-500/30 text-xs font-bold rounded-xl transition shadow-sm cursor-pointer"
+              title="Issue adverse scrutiny order and escalate to SAC"
+            >
+              <XCircle size={14} />
+              <span>Reject / SAC Escalate</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Current Active Determination Status Display */}
+        {detail.decision && (
+          <div className={`p-3.5 rounded-xl border text-xs space-y-2 transition-all ${
+            detail.decision === 'RECOMMEND_APPROVAL'
+              ? 'bg-success-soft/30 border-success/40 text-success'
+              : detail.decision === 'ISSUE_DEFICIENCY_NOTICE'
+              ? 'bg-warning-soft/30 border-warning/40 text-warning'
+              : detail.decision === 'RECOMMEND_EVC_INSPECTION'
+              ? 'bg-blue-500/10 border-blue-500/30 text-primary'
+              : 'bg-danger-soft/30 border-danger/40 text-danger'
+          }`}>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center space-x-2">
+                {detail.decision === 'RECOMMEND_APPROVAL' && <CheckCircle2 size={16} className="text-success shrink-0" />}
+                {detail.decision === 'ISSUE_DEFICIENCY_NOTICE' && <AlertTriangle size={16} className="text-warning shrink-0" />}
+                {detail.decision === 'RECOMMEND_EVC_INSPECTION' && <Building2 size={16} className="text-primary shrink-0" />}
+                {detail.decision === 'REJECT' && <XCircle size={16} className="text-danger shrink-0" />}
+                <span className="font-bold uppercase tracking-wider text-text-primary">
+                  {detail.decision === 'RECOMMEND_APPROVAL' && 'Statutory Endorsement: Recommended for Approval (EoA)'}
+                  {detail.decision === 'ISSUE_DEFICIENCY_NOTICE' && 'Formal Deficiency Notice Dispatched (Rectification Loop Active)'}
+                  {detail.decision === 'RECOMMEND_EVC_INSPECTION' && 'Expert Visit Committee (EVC) Physical Inspection Mandated'}
+                  {detail.decision === 'REJECT' && 'Adverse Scrutiny Order: Application Rejected / Escalated to SAC'}
+                </span>
+                <span className="text-[10px] font-mono opacity-80">
+                  &bull; Version v{detail.version || 1}
+                </span>
+              </div>
+
+              {/* Rectification Loop Action if Deficiency Notice is active */}
+              {detail.decision === 'ISSUE_DEFICIENCY_NOTICE' && (
+                <button
+                  type="button"
+                  onClick={handleSimulateRectification}
+                  disabled={isSimulatingRectification}
+                  className="px-3 py-1.5 bg-warning hover:bg-amber-400 text-black text-xs font-bold rounded-lg transition-all shadow-sm flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
+                  title="Simulate institution applicant uploading corrected affidavit & NOC"
+                >
+                  <RotateCcw size={13} className={isSimulatingRectification ? 'animate-spin' : ''} />
+                  <span>{isSimulatingRectification ? 'Re-Validating...' : 'Simulate Applicant Rectification Dossier'}</span>
+                </button>
+              )}
+            </div>
+
+            {detail.decisionRemarks && (
+              <p className="text-[11px] text-text-secondary leading-relaxed pl-6 italic">
+                &ldquo;{detail.decisionRemarks}&rdquo;
+              </p>
+            )}
+
+            <div className="text-[10px] text-text-muted pl-6 flex items-center space-x-2 font-mono">
+              <span>Recorded by: <strong className="text-text-secondary">{detail.decisionBy || 'Scrutiny Officer'}</strong></span>
+              {detail.decisionAt && <span>&bull; {new Date(detail.decisionAt).toLocaleString()}</span>}
+            </div>
+          </div>
+        )}
+
+        {/* Success toast if present */}
+        {decisionSuccessMsg && (
+          <div className="p-2.5 rounded-lg bg-success-soft border border-success/30 text-success text-xs flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 size={14} />
+              <span>{decisionSuccessMsg}</span>
+            </div>
+            <button onClick={() => setDecisionSuccessMsg(null)} className="text-[10px] underline font-bold cursor-pointer">Dismiss</button>
+          </div>
+        )}
       </div>
 
       {/* Modern Segmented Controller Tabs */}
@@ -307,7 +452,7 @@ export const ApplicationDetailView: React.FC = () => {
               : 'text-text-secondary hover:text-text-primary hover:bg-card-subtle'
           }`}
         >
-          <Sparkles size={15} />
+          <Network size={15} />
           <span>Evidence Graph ({graphData.nodes.length})</span>
         </button>
       </div>
@@ -345,26 +490,6 @@ export const ApplicationDetailView: React.FC = () => {
                 <h3 className="text-xs font-bold text-text-primary uppercase tracking-wider">
                   Mandatory Checklist
                 </h3>
-                <div className="flex items-center space-x-1.5">
-                  <button
-                    type="button"
-                    onClick={() => handleBatchLoadDossier('Dossier_A_Compliant')}
-                    disabled={!!uploadingDocType}
-                    className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded border border-emerald-300 hover:bg-emerald-100 transition"
-                    title="Auto-fill missing slots with Compliant showcase documents"
-                  >
-                    + Compliant Set
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleBatchLoadDossier('Dossier_B_Deficiencies_Detected')}
-                    disabled={!!uploadingDocType}
-                    className="px-2 py-0.5 bg-amber-50 text-amber-800 text-[10px] font-bold rounded border border-amber-300 hover:bg-amber-100 transition"
-                    title="Auto-fill missing slots with Deficient showcase documents"
-                  >
-                    + Deficient Set
-                  </button>
-                </div>
               </div>
 
               {isPipelineActive && (
@@ -481,7 +606,7 @@ export const ApplicationDetailView: React.FC = () => {
                     {activeDoc ? `No document file uploaded yet for ${activeDoc.docType}` : 'Select a document to inspect'}
                   </p>
                   <p className="text-[11px] mt-1 max-w-md">
-                    Upload a statutory PDF or load a showcase dossier on the left to inspect high-resolution vector pages with exact in-place line-error markers.
+                    Upload a statutory PDF on the left checklist to inspect high-resolution vector pages with in-place line-error markers.
                   </p>
                 </div>
               )}
@@ -509,12 +634,46 @@ export const ApplicationDetailView: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <span className={`px-2.5 py-0.5 rounded text-[11px] font-bold ${
+              <span className={`px-2.5 py-1 rounded-lg text-[11px] font-bold ${
                 uniqueFindings.length > 0 ? 'bg-danger-soft text-danger border border-danger/30' : 'bg-success-soft text-success'
               }`}>
-                {uniqueFindings.length} Regulatory Deficiency{uniqueFindings.length === 1 ? '' : 'ies'} Found
+                {uniqueFindings.length} Potential Anomal{uniqueFindings.length === 1 ? 'y' : 'ies'} / Deficiencies Flagged
+              </span>
+              {uniqueFindings.length > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => { setDecisionModalType('ISSUE_DEFICIENCY_NOTICE'); setIsDecisionModalOpen(true); }}
+                  className="px-2.5 py-1 rounded-lg bg-warning hover:bg-amber-400 text-black font-bold text-xs flex items-center space-x-1 cursor-pointer shadow-sm transition"
+                  title="Dispatch consolidated deficiency notice under APH Sec 4.5"
+                >
+                  <Send size={12} />
+                  <span>Issue Deficiency Directive</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => { setDecisionModalType('RECOMMEND_APPROVAL'); setIsDecisionModalOpen(true); }}
+                  className="px-2.5 py-1 rounded-lg bg-success hover:bg-emerald-600 text-white font-bold text-xs flex items-center space-x-1 cursor-pointer shadow-sm transition"
+                  title="Recommend application for approval"
+                >
+                  <CheckCircle2 size={12} />
+                  <span>Recommend Approval</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Statutory Advisory Due-Process Guardrail */}
+          <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 text-xs text-text-secondary flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <ShieldCheck size={15} className="text-primary shrink-0" />
+              <span className="text-[11px] text-text-primary">
+                <strong>Statutory Guardrail:</strong> All automated findings are preliminary advisory indicators. Scrutiny, inspections, and final decisions remain strictly with competent AICTE authorities.
               </span>
             </div>
+            <span className="px-2 py-0.5 rounded bg-card border border-border text-[10px] font-mono text-text-muted font-bold">
+              APH 2025-26 CITED
+            </span>
           </div>
 
           {uniqueFindings.length === 0 ? (
@@ -669,7 +828,7 @@ export const ApplicationDetailView: React.FC = () => {
           <div className="bg-card rounded-card border border-border p-3.5 shadow-card flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center space-x-2.5">
               <div className="p-2 bg-emerald-50 text-emerald-700 rounded-lg border border-emerald-200 shrink-0">
-                <Sparkles size={18} />
+                <Network size={18} />
               </div>
               <div>
                 <h3 className="font-bold text-text-primary text-xs uppercase tracking-wider">
@@ -721,6 +880,21 @@ export const ApplicationDetailView: React.FC = () => {
             setFindings(prev => prev.map(f => f.id === findingId ? { ...f, clarificationDispatched: true } : f));
             setClarificationSuccessMsg(`Clarification Notice ${noticeNo} successfully dispatched to institution authority.`);
             setClarificationFinding(null);
+          }}
+        />
+      )}
+
+      {/* Officer Determination Modal */}
+      {isDecisionModalOpen && detail && (
+        <OfficerDecisionModal
+          isOpen={isDecisionModalOpen}
+          appDetail={detail}
+          findings={findings}
+          initialDecision={decisionModalType}
+          onClose={() => setIsDecisionModalOpen(false)}
+          onSuccess={() => {
+            setDecisionSuccessMsg("Official scrutiny determination recorded and appended to SHA-256 audit ledger.");
+            fetchData(false);
           }}
         />
       )}

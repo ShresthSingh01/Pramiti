@@ -1,4 +1,4 @@
-# Product Requirements Document (Final): EvidenceGraph
+# Product Requirements Document (Final): PRAMITI
 
 **Verifiable Evidence Intelligence for AICTE Approval Processing**
 
@@ -6,7 +6,7 @@ SIH Problem Statement 26261 | Organization: AICTE, Regulation Bureau | Theme: Sm
 
 ## 1. Executive summary
 
-EvidenceGraph is an AI **decision-support** platform that validates AICTE approval applications at the earliest stage. It converts each application into a **verifiable evidence graph**: every extracted fact is linked to its document, page and region; checked against versioned, clause-cited rules; authenticated through issuing-authority adapters; and recorded in a tamper-evident audit chain. When confidence is low, the system **abstains and routes the case to a human**. Performance is **measured on held-out data against a baseline**, and every limitation is stated openly.
+PRAMITI is an AI **decision-support** platform that validates AICTE approval applications at the earliest stage. It converts each application into a **verifiable evidence graph**: every extracted fact is linked to its document, page and region; checked against versioned, clause-cited rules; authenticated through issuing-authority adapters; and recorded in a tamper-evident audit chain. When confidence is low, the system **abstains and routes the case to a human**. Performance is **measured on held-out data against a baseline**, and every limitation is stated openly.
 
 **Honesty statement.** The prototype is built and evaluated on synthetic and anonymized data. Only QR decoding and digital-signature validation are real verification mechanisms; other issuing-authority sources are simulated and labeled. Final regulatory decisions remain with AICTE authorities.
 
@@ -37,6 +37,30 @@ The prototype goes deep on one **golden path** and demonstrates extensibility th
 | Infrastructure | Floor-plan area and room-count checks, EXIF and geotag checks, reused-photo detection | Computer-vision analysis of photos and video |
 
 **Out of scope:** final approval or rejection decisions, access to restricted databases, any bypass of access controls.
+
+## 3.1 Regulatory & Architectural Guardrails (Evaluator Concerns Addressed)
+
+To ensure legal defensibility and prevent ungrounded claims, PRAMITI strictly adheres to four architectural guardrails:
+
+1. **Genuine vs. Simulated Verification Taxonomy:**
+   - External registry queries are classified under the PS-mandated 6 statuses: `VERIFIED_FROM_SOURCE`, `MISMATCH_DETECTED`, `EXPIRED`, `PENDING`, `SOURCE_UNAVAILABLE`, `MANUAL_REVIEW_REQUIRED`.
+   - In prototype mode, mock adapters are explicitly badged as `SIMULATED DEMO [SIM]`. Production deployment seamlessly routes to the national DigiLocker `/pull/uri` endpoint without core architecture changes.
+
+2. **Evidentiary Threshold & "Potential Anomaly" Policy:**
+   - Algorithms detect statistical and raster anomalies (compression deltas, metadata tampering), but cannot legally prove fraudulent intent (*mens rea*).
+   - All findings are labeled as **`Potential Anomalies`** rather than definitive accusations of fraud, and recommendation outputs are restricted to `"Needs More Evidence"` or `"Recommend Inspection"`.
+
+3. **Authoritative Golden Rule Grounding (APH 2025–26):**
+   - The platform avoids overclaiming generic rule automation by demonstrating a vetted **Golden Rule Set of 6 foundational statutory checks** (Land Area reconciliation, NOC validity, Built-up area schedule, NAAC accreditation, Entity consistency, and Authorized signatory).
+   - Every rule contains complete statutory metadata: `rule_id`, `clause_ref`, `handbook_version (APH 2025-26)`, `applicable_category`, and `statutory_rationale`.
+
+4. **Component Decomposition Matrix (No AI Buzzwords):**
+   - **PyMuPDF / Regex:** Deterministic extraction of raw text and normalized bounding boxes `[ymin, xmin, ymax, xmax]`.
+   - **OpenCV / ELA / pyzbar:** Visual signal processing for raster compression deltas, QR decoding, and duplicate image hashing.
+   - **On-Device SLM (Qwen-2.5 3B):** Schema-constrained extraction of unstructured legal notary phrasing at ₹0 API cost.
+   - **Relational Evidence Graph:** Deterministic $O(1)$ relationship comparisons between cross-document fact nodes.
+   - **PageIndex Engine:** Vectorless hierarchical tree navigation across official APH 2025–26 chapters.
+   - **Human Scrutiny Officer:** Holds sole statutory authority for regulatory decisions.
 
 ## 4. Compliance matrix: how the PRD maps to the PS
 
